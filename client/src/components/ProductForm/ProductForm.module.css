@@ -1,0 +1,71 @@
+.productForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  width: 56.2rem;
+  max-width: 96%;
+  height: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.productForm label {
+  width: 60%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #7a7d81;
+  margin-bottom: 0.5rem;
+  display: block;
+  text-align: left;
+}
+
+.productForm input,
+select {
+
+  background-color: transparent;
+  width: 60%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #343A40;
+  border-radius: 8px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: #7a7d81;
+}
+
+.productForm input:focus,
+.productForm select:focus {
+  border-color: #FF4D4D;
+  box-shadow: 0 0 0 3px rgba(255, 77, 77, 0.25);
+
+}
+
+.modalItem {
+  width: 100%;
+  display: flex;
+
+  justify-content: center;
+
+}
+
+
+
+
+.inStockSwitch {
+  width: 62%;
+
+}

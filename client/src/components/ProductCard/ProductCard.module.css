@@ -1,0 +1,29 @@
+.card {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: rgb(203, 182, 182);
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  overflow: hidden;
+ 
+ 
+
+}
+
+.card h2,h1,p{
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}

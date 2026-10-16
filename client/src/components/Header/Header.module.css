@@ -1,0 +1,54 @@
+.header {
+  margin-bottom: 1rem;
+  min-height: 4.3rem;
+  display: flex;
+ justify-content: center;
+  flex-wrap: wrap;
+  background: rgb(230, 215, 215);
+  margin-bottom: 15px;
+  align-items: center;
+
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.header nav {
+
+  display: flex;
+   margin: 0 auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  justify-content: space-between;
+  max-width: 56.2rem;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  gap:50px
+}
+ 
+
+.userInfo {
+ 
+  flex: 1;
+  min-width: 0;
+  flex-shrink: 1;
+
+}
+
+.userInfo h2 {
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  font-size: 1rem;
+
+}
+
+.pages{
+  display: flex;
+  gap:15px;
+}

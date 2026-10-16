@@ -1,0 +1,134 @@
+.blur {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99;
+  padding: 1rem;
+}
+
+.modal {
+
+  z-index: 100;
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.6rem;
+  align-items: center;
+  background: rgb(230, 215, 215);
+  max-width: 28.1rem;
+  width: 96%;
+  border-radius: 0.5rem;
+  aspect-ratio: 1/1;
+  box-sizing: border-box;
+
+
+
+}
+
+.modal form {
+  width: 100%;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.authText {
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.authText span {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.authText span:hover {
+  color: gray;
+}
+
+
+.modal input {
+  border-radius: 8px;
+  max-width: 18.75rem;
+  width: 90%;
+  box-sizing: border-box;
+  background: transparent;
+  outline: none;
+  border: 1px solid black;
+  padding: 0.75rem 1rem;
+    font-size: 1rem;
+  color: gray;
+}
+
+.modal input::placeholder {
+  color: gray
+}
+
+.modal input:focus {
+  border: 1px solid rgb(203, 123, 123);
+}
+
+.modal input.err {
+  border: 1px solid red;
+}
+
+.modalItem {
+
+  max-width: 28.1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+
+
+.close {
+  position: absolute;
+  right: 0.3rem;
+  top: 0;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: gray;
+}
+
+.errors {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  color: rgba(235, 64, 64, 0.8);
+  border-radius: 0.2rem;
+  width: 70%;
+  padding: 0.2rem;
+  padding-left: 2rem;
+  font-size: 0.7rem;
+}
+
+.errors svg {
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
