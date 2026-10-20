@@ -111,11 +111,12 @@ export const editProductData = createAsyncThunk<
     const state = getState()
     const res = await editProduct({ ...newProduct, oldCategory: state.productData.editProduct.product.category} );
     
+
     if (!res.ok) {
       return rejectWithValue({ ok: false, e: res.e });
     }
     
-    dispatch(updateProductInList(res.data));
+    dispatch(updateProductInList(newProduct));
     return { ok: true, data: res.data as productI };
   }
 );

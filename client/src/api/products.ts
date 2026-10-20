@@ -11,16 +11,22 @@ type headers = {
 }
 type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
 
+type searchType = Record<string, string | number | boolean>
 
-const productAPI = async < Response, T = undefined > (url: string| null, type :  typeReq = 'GET', body ? : null | T) : Promise<typeResponseAPI<Response>> => {
+
+const productAPI = async < Response, T = undefined > (url: string| null, type :  typeReq = 'GET', body ? : null | T, search? : searchType ) : Promise<typeResponseAPI<Response>> => {
   try {
     const token = localStorage.getItem('token');
     const headers:headers = {
       'Content-Type': 'application/json',
     };
-    if (token) headers['Authorization']= ` ${token}`
+    if (token) headers['Authorization'] = ` ${token}`
+    // {limit : 10, page : 1}
+    let query = '' // ?limit=10&page=1
+    if (search) query = `?limit=${search.limit}&page=${search.page}`;
+    //
     
-    const response = await fetch(url ? `${reqLink}/${url}` : reqLink, {
+    const response = await fetch(url ? `${reqLink}/${url}${query}` : reqLink, {
       method: type,
       headers,
       body: body ? JSON.stringify(body) : null,
@@ -58,4 +64,9 @@ const productAPI = async < Response, T = undefined > (url: string| null, type : 
 export const editProduct = async (product:productI) => {
   const data = await productAPI('edit', 'PATCH',product);
   return data;
-  }
+}
+  
+export const getProductsByCategories = async (search:searchType) => {
+  const data = await productAPI < { products: productI[],total:number},searchType>('search/category', 'GET', null, search);
+  return data
+}

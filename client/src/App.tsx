@@ -8,9 +8,9 @@ import Button from './components/Button/Button';
 import { logoutUser } from './features/user/userSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import AddProductPage from './pages/AddProductPage/AddProductPage';
+import AllProductPage from './pages/AllProductPage/AllProductPage';
 import Auth from './features/user/Auth';
 import Modal from './components/Modal/Modal';
-import HomePage from './pages/HomePage/HomePage';
 import Page404 from './pages/404Page/Page404';
 import MyProductsPage from './pages/MyProductsPage/MyProductsPage';
 import ProductForm from './components/ProductForm/ProductForm';
@@ -50,7 +50,7 @@ function App() {
       )}
 
       <Routes>
-        <Route path='/' element={<HomePage />} />
+        <Route path='/' element={<AllProductPage />} />
         
         <Route path='*' element={<Page404/>}/>
 

@@ -18,7 +18,8 @@ export default function MyProductsPage({ openModal, closeModal }: props) {
   const cards = useMemo(() => {
     return products.map((p) => <ProductCard product={p} key={p.id} openModal={openModal} closeModal={ closeModal} />)
   },[products])
-  if (isLoadingApp ) return <Loader />
+  if (isLoadingApp) return <Loader />
+  
 if(products.length <= 0) return  <h1>No products</h1>
  console.log(products)
   return (
