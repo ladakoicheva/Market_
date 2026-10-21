@@ -5,7 +5,7 @@ import { getUserProducts } from "./productsController.js";
 import { getCategories } from "./productsController.js";
 import { getProductsByCategory } from "../search/controller.js";
 import { editProduct } from "./productsController.js";
-
+import { getProductsByCategoryForSearch } from "../search/controller.js";
 
 export const productRouter = Router();
 
@@ -16,5 +16,6 @@ productRouter.get('/categories', getCategories)
 productRouter.patch('/edit', authorize, editProduct)
 
 productRouter.get('/search/category', getProductsByCategory);
+productRouter.get('/search/category/productName', getProductsByCategoryForSearch);
 
 // data, fileName, ...url

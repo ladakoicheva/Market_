@@ -10,7 +10,7 @@ type props ={
 }
 
 export default function ProductCard({ product, closeModal, openModal }: props) {
-  console.log(product)
+
   const dispatch = useDispatch();
   return (
     <div className={style.card}>
