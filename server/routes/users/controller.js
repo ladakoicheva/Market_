@@ -1,10 +1,10 @@
-import { generateToken } from "../../../utils/authHelpers.js";
-import { deleteToken,generateFileTokens } from "../../../services/tokenService.js";
-import { setUsersFileDir } from "../../../services/userService.js";
-import { getErrorReq,getSuccessReq } from "../../../utils/responseHelpers.js";
+import { generateToken } from "../../utils/authHelpers.js";
+import { deleteToken,generateFileTokens } from "../../services/tokenService.js";
+import { setUsersFileDir } from "../../services/userService.js";
+import { getErrorReq,getSuccessReq } from "../../utils/responseHelpers.js";
 import { v4 as uuidv4 } from 'uuid';
-import { roles } from "../../../../sheme/sheme.js";
-import { getUserFile } from "../../../services/userService.js";
+import { roles } from "../../../sheme/sheme.js";
+import { getUserFile } from "../../services/userService.js";
 
 export const registerUser = async (req, res) => {
   // req.headers.authorization 

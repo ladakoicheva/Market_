@@ -21,7 +21,7 @@ export const addProductCategories = async (id, email, category) => {
 
   categoriesFile.data.push(data)
   const res = await setFileJSON(categoriesFile.data, 'datas', 'products', categ + '.json');
-  console.log(res);
+
 }
 
 export const editProductCategory = async (oldCategory, newCategory, id) => {
@@ -36,7 +36,7 @@ export const editProductCategory = async (oldCategory, newCategory, id) => {
     const oldCategData = oldFileRes.data;
     const newCategData = newFileRes.data;
     const index = oldCategData.findIndex((el) => el.id === id);
-    if (index !== -1) return { ok: false }
+    if (index === -1) return { ok: false }
     oldCategData.splice(index, 1);
     const itemToMove = oldCategData[index];
     newCategData.push(itemToMove);
@@ -52,112 +52,166 @@ export const editProductCategory = async (oldCategory, newCategory, id) => {
 
 }
 
+// {limit : 10, page : 1}
 
-// ...?limit=10&page=1
-// ...?limit=10&page=2
-// ...?limit=10&page=3
+
 export const getProductsByCategory = async (req, res) => {
+  const page = +req.query.page;
+  const limit = +req.query.limit; //10
+  let start = (page - 1) * limit;
+  let end = start + limit;
+  const productNameSearch = req.query.search;
+
+
+
+  if (productNameSearch) return getProductsByCategoryForSearch(req, res)
+
   try {
+    const getProductsByCateg = await getFile('datas', 'products-all', 'test.json');
 
-    const limit = +req.query.limit
-    const page = +req.query.page
-
-    const product = await getFile('datas', 'products-all', 'test.json');
-    const totalPages = Math.ceil(product.data.length / limit);
-    const start = (page - 1) * limit;
-    const end = limit + start;
-
-
-    const products = product.data.slice(start, end);
-
-    const productData = await Promise.all(products.map(async ({ id, email }) => {
-      const link = getLink('datas', 'users', email, 'products', id + '.json');
-      const fileContent = await fs.readFile(link, 'utf8');
-      const parsedData = JSON.parse(fileContent);
-      return parsedData;
-    }));
+    /*{
+    "id": "f99caba6-59f2-4024-8b6d-74a17b031095", айди продукта
+    "email": "koichevalada@gmail.com" ,
+  },
+  {
+    "email": "wedfr@gmail.com",
+    "id": "901e4618-4c58-406d-8505-f1e3e2ab8dd8"
+  }*/
 
 
 
+    const getProducts = await Promise.all(getProductsByCateg.data
+      .slice(start, end)
+      .map(async (p) => {
+
+        const link = getLink('datas', 'users', p.email, 'products', p.id + '.json');
+        const res = await fs.readFile(link);
+        const parsedData = JSON.parse(res);
 
 
-    return res.status(200).json(getSuccessReq({ total: totalPages, products: productData }));
+
+        return parsedData;
+      }
+
+      )
+
+    );
+
+    const hasMore = end < getProductsByCateg.data.length
+
+
+
+    return res.status(200).json(getSuccessReq({ products: getProducts, index: 0, hasMore }));
 
   } catch (error) {
     return res.status(500).json(getErrorReq(error));
   }
+
+
+
+
 }
 
 
 
-const getProductForSearch = async ({ id, email }, text) => {
+export const searchForMatch = async ({ id, email }, search) => {
   try {
-    const search = text ? text.toLowerCase().trim() : "";
-    const link = getLink('datas', 'users', email, 'products', id + '.json');
+    const link = getLink('datas', 'users', email, 'products', id + '.json')
+    const searchValue = search.trim().toLowerCase();
+    const res = await fs.readFile(link);
 
-    const fileContent = await fs.readFile(link, 'utf8');
-    const parsedData = JSON.parse(fileContent);
 
-  if (!search) return parsedData;
 
-    if (parsedData.name.trim().toLowerCase().includes(search)) return parsedData;
+    const parsedData = JSON.parse(res);
 
-    return null;
+    if (parsedData.name
+      .toLowerCase()
+      .includes(searchValue)) return parsedData;
+
+
   } catch (error) {
-    
     return null;
   }
+
+
+
+
 }
 
 
 export const getProductsByCategoryForSearch = async (req, res) => {
+
+  const limit = +req.query.limit; //10
+  let startSearch = +req.query.next || 0;
+  let endSearch = startSearch + (limit * 3);
+  const productNameSearch = req.query.search;
+
+
+
   try {
+    const getProductsByCateg = await getFile('datas', 'products-all', 'test.json');
+
+    /*{
+    "id": "f99caba6-59f2-4024-8b6d-74a17b031095", айди продукта
+    "email": "koichevalada@gmail.com" ,
+  },
+  {
+    "email": "wedfr@gmail.com",
+    "id": "901e4618-4c58-406d-8505-f1e3e2ab8dd8"
+  }*/
 
 
-    const limit = +req.query.limit
-    const page = +req.query.page
-    const search = req.query.search
-    const product = await getFile('datas', 'products-all', 'test.json');
-    const start = (page - 1) * limit;
-    const end = limit + start;
-    const productsFileLink = product.data;
-    const productsMatch = [] 
-   
-   
-   
-  
-     await Promise.all(productsFileLink.map(async({ id, email }) => {
-        const match = await getProductForSearch({ id, email }, search);
-        if (match) productsMatch.push(match);
-      })
-       )
-    const totalPages = Math.ceil(productsMatch.length / limit);
-    
-    return res.status(200).json(getSuccessReq({ total: totalPages, products: productsMatch.slice(start,end) }));
+    const productsMatch = [];
+    let isFinish = true
+    let lastIndexProduct = null;
 
-    // for (let i = 0; i < productsFileLink.length; i++) {
-    //   const { id, email } = productsFileLink[i];
-
-    //   const link = getLink('datas', 'users', email, 'products', id + '.json');
-    //   const fileContent = await fs.readFile(link, 'utf8');
-    //   const parsedData = JSON.parse(fileContent);
-
-    //   if (parsedData.name.toLowerCase().includes(text)) productsMatch.push(parsedData)
-    //   if (productsMatch.length >= limit) break;
-    // }
+    while (isFinish) {
 
 
-    // 200 
-    // 5, 5, 5, 5
+      const products = getProductsByCateg.data.slice(startSearch, endSearch);
+      if (products.length === 0) isFinish = false;
+
+      await Promise.all(
+        products.map(async (p, i) => {
+          if (productsMatch.length >= limit) return
+
+          const res = await searchForMatch({ id: p.id, email: p.email }, productNameSearch);
+          if (res) productsMatch.push(res);
+          if (productsMatch.length >= limit) {
+            isFinish = false;
+            lastIndexProduct = startSearch + i;
+
+          }
+
+        })
 
 
+      )
+      startSearch = endSearch;
+      endSearch += limit * 3;
+
+    }
 
 
+    const hasMore = getProductsByCateg.data.length > lastIndexProduct + 1;
+    // const total = Math.ceil(productsMatch.length / limit);
+
+    return res.status(200).json(getSuccessReq({ index: lastIndexProduct, products: productsMatch, hasMore }));
 
   } catch (error) {
-    return res.status(500).json(getErrorReq('failed'));
+    return res.status(500).json(getErrorReq(error));
   }
+
+
+
+
 }
+
+
+// ...?limit=10&page=1
+// ...?limit=10&page=2
+// ...?limit=10&page=3
+
 //[1,2,3,4,5,6,7,8,9,10].slice(5,10) // 6 - 10
 //[1,2,3,4,5,6,7,8,9,10].slice(0,5) // 1 - 5
 
@@ -168,3 +222,9 @@ export const getProductsByCategoryForSearch = async (req, res) => {
 
 
 // { "id": "901e4618-4c58-406d-8505-f1e3e2ab8dd8", "email": "koichevalada@gmail.com" }
+
+//getProductsByCategory
+//getProductsByCategoryForSearch
+
+
+

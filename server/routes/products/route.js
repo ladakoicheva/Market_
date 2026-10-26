@@ -1,10 +1,10 @@
 import { authorize } from "../../middlewares/auth.js";
 import { Router } from "express";
-import { addProduct } from "./productsController.js";
-import { getUserProducts } from "./productsController.js";
-import { getCategories } from "./productsController.js";
+import { addProduct } from "./controller.js";
+import { getUserProducts } from "./controller.js";
+import { getCategories } from "./controller.js";
 import { getProductsByCategory } from "../search/controller.js";
-import { editProduct } from "./productsController.js";
+import { editProduct } from "./controller.js";
 import { getProductsByCategoryForSearch } from "../search/controller.js";
 
 export const productRouter = Router();
@@ -16,6 +16,6 @@ productRouter.get('/categories', getCategories)
 productRouter.patch('/edit', authorize, editProduct)
 
 productRouter.get('/search/category', getProductsByCategory);
-productRouter.get('/search/category/productName', getProductsByCategoryForSearch);
+
 
 // data, fileName, ...url

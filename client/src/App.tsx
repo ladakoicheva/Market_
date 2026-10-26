@@ -29,7 +29,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      {isLoadingApp && <Loader />}
+      {/* {isLoadingApp && <Loader />} */}
         <Auth />
 
       <Header>

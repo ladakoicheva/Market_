@@ -3,19 +3,34 @@ import style from './AllProductPage.module.css'
 import { getProductsByCategories } from '../../api/products';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import type { productI } from '../../features/product/types';
-import { getProductsBySearch } from '../../api/products';
+
+
+const limit = 10
 
 export default function AllProductPage() {
+  const [search, setSearch] = useState('');
+  const [data, setData] = useState<{
+    products: productI[], index: number,
+    currentPage: number, hasMore: boolean
+  }>({
+  products: [],
+  index: limit, //!
+  currentPage: 0,
+  hasMore:true,
+  });
 
-const [products, setProducts] = useState<productI[]>([]);
-const [currentPage, setCurrentPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
-const [search, setSearch] = useState('');
-const timeOutID = useRef<number|null>(null)
 
+  const { products,  index, currentPage,hasMore } = data;
+  const timeOutID = useRef<number|null>(null)
+
+
+  //для пагинации
+  useEffect(() => {
+       history.pushState(null, "", `?page=${currentPage}&limit=10&search=${search}&next=${index}`);
+  },[data])
 
   const handleSearch = (e:React.ChangeEvent<HTMLInputElement>) => {
-   
+    
     setSearch(e.target.value);
     if (timeOutID.current) {
       clearTimeout(timeOutID.current);
@@ -24,11 +39,16 @@ const timeOutID = useRef<number|null>(null)
 
     timeOutID.current = setTimeout(async () => {
 
-      history.pushState(null, "", `?page=1&limit=10&search=${e.target.value}`);
-      const res = await getProductsBySearch();
-       if (res.ok) {
-        setProducts([...res.data.products]);
-        setTotalPages(res.data.total);
+    
+      const res = await getProductsByCategories();
+      if (res.ok) {
+        
+        setCurrentPage(1)
+        // setProducts((prev)=>[..]);
+         setTotalPages(res.data.total);
+     
+        //  setNext(res.data.index )
+        
       }
       return
 
@@ -36,42 +56,34 @@ const timeOutID = useRef<number|null>(null)
     
   
   }
+ 
   
+//
+
+  const getProducts = async () => { 
+    const params = { page : data.currentPage + 1, limit}
   
+  const res = await getProductsByCategories(params);
+  if (res.ok) {
+    const d = res.data;
+    setData(data => ({...data,...d, products : [...data.products, ...d.products], currentPage : data.currentPage + 1}))
+  
+  }
+};
 
 
-  useEffect(() => {
-    const getProducts = async () => { 
-    
-      const res = await getProductsByCategories();
-      if (res.ok) {
-        setProducts([...res.data.products]);
-        setTotalPages(res.data.total);
-      }
-      return
-    };
 
-
-      history.pushState(null, "", `?page=${currentPage}&limit=10&search=""`);
+useEffect(() => {
     getProducts();
-  }, [currentPage]);
+  }, []);
+
 
 
     const cards = useMemo(() => {
       return products.map((p,index) => <ProductCard product={p} key={index}  />)
     }, [products])
   
-  
-  const buttons = useMemo(() => {
-    const buttonsArr = [];
-    for (let i = 1; i <= totalPages; i++) {
-      buttonsArr.push(<button onClick={() => {
-        history.pushState(null, "", `?page=${i}&limit=10&search=${search}`);
-        setCurrentPage(i)
-      }} key={i}>{i}</button>)
-    }
-    return buttonsArr
-  },[totalPages])
+
 
   return (
     <>
@@ -79,9 +91,9 @@ const timeOutID = useRef<number|null>(null)
       <div className={style.grid_template_columns}>
       {cards}
       </div>
+      {hasMore && <button onClick={getProducts}>neext</button>
     
-      <div>{buttons}</div>
-    </>
-
+  } 
+  </>
   )
 }

@@ -11,25 +11,35 @@ type headers = {
 }
 type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
 
-type searchType = Record<string, string | number | boolean>
+
+const getQuery = (data: Record<string, any>) => {
+  const query = new URLSearchParams()
+  Object.entries(data).forEach(([key, value]) => {
+    if (value === null) return 
+    query.set(key, String(value))
+  })
+
+  return query.toString() 
+}
 
 
-const productAPI = async < Response, T = undefined > (url: string| null, type :  typeReq = 'GET', body ? : null | T) : Promise<typeResponseAPI<Response>> => {
+
+const productAPI = async < Response, T = undefined > (url: string = '', type :  typeReq = 'GET', body ? : null | T, params ? : Record<string, any>) : Promise<typeResponseAPI<Response>> => {
   try {
     const token = localStorage.getItem('token');
     const headers:headers = {
       'Content-Type': 'application/json',
     };
     if (token) headers['Authorization'] = ` ${token}`
-    let query = ''
-    const params = new URLSearchParams(location.search);
-    const paramsData = { search: params.get('search'), page: params.get('page'), limit: params.get('limit') }
-    // {limit : 10, page : 1}
+    const query = params ? '?' + getQuery(params) : ''
+    // const params = new URLSearchParams(location.search);
+    // const paramsData = { search: params.get('search'), page: params.get('page'), limit: params.get('limit') ,next:params.get('next')}
+    // // {limit : 10, page : 1}
     
-    if (paramsData.search||paramsData.limit||paramsData.page) query = `?limit=${paramsData.limit}&page=${paramsData.page}&search=${paramsData.search}`;
+    // if (paramsData.search || paramsData.limit || paramsData.page) query = `?limit=${paramsData.limit}&page=${paramsData.page}&search=${paramsData.search}&next=${paramsData.next}`;
     //
     
-    const response = await fetch(url ? `${reqLink}/${url}${query}` : reqLink, {
+    const response = await fetch(`${reqLink}/${url}${query}`, {
       method: type,
       headers,
       body: body ? JSON.stringify(body) : null,
@@ -69,13 +79,35 @@ export const editProduct = async (product:productI) => {
   return data;
 }
   
-export const getProductsByCategories = async () => {
-  const data = await productAPI < { products: productI[],total:number}>('search/category', 'GET', null);
+export const getProductsByCategories = async (params : Record<string, any>) => {
+  const data = await productAPI < { products: productI[],total:number}>('search/category', 'GET', null, params);
   return data
 }
 
-export const getProductsBySearch = async () => {
-    const data = await productAPI < { products: productI[],total:number}>('search/category/productName', 'GET', null);
-  return data
-}
+// export const getProductsBySearch = async () => {
+//     const data = await productAPI < { products: productI[],total:number}>('search/category/productName', 'GET', null);
+//   return data
+// }
 // /search/category/productName
+
+
+// const para = {
+//   name: 'Alex',
+//   age: 11,
+//   t : false
+// }
+
+
+
+// const getQuery = (data: Record<string, any>) => {
+//   const query = new URLSearchParams()
+//   Object.entries(data).forEach(([key, value]) => {
+//     if (value === null) return 
+//     query.set(key, String(value))
+//   })
+//   return query.toString() 
+// }
+// name=Alex&age=11&t=false
+
+// const a = getQuery(para)
+// console.log(a);
