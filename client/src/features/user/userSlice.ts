@@ -8,13 +8,12 @@ import type { stateI } from "./types";
 import type { AppDispatch } from "../../redux/store";
 import { updateProductNoUser } from "../product/productSlice";
 import { getUserProductData } from "../product/productSlice";
-import { getCategoriesData } from "../product/productSlice";
+
 
 const initialState: stateI = {
 
   user: null,
   mode: ModeType.SIGN_UP,
-  isAuth: false,
   isLoadingApp: true
   
 }
@@ -28,16 +27,11 @@ const userSlice = createSlice({
     changeModeSignIn: (state) => {
        state.mode = ModeType.SIGN_IN;
     },
-    changeAuthFalse: (state) => {
-      state.isAuth = false;
-    },
-     changeAuthTrue: (state) => {
-      state.isAuth = true;
-    },
+  
     changeUserData: (state, action) => {
       const data =action.payload
       state.user = data;
-      state.isAuth = Boolean(data);
+
       console.log('данные пользователя получили')
       
     },
@@ -131,7 +125,7 @@ export const authorizeUser = createAsyncThunk<
       }
       dispatch(getUserProductData());
       dispatch(changeUserData(res.data));
-      dispatch(getCategoriesData());
+    
       
       return { ok: true };
     } catch (error) {

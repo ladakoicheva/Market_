@@ -80,34 +80,11 @@ export const editProduct = async (product:productI) => {
 }
   
 export const getProductsByCategories = async (params : Record<string, any>) => {
-  const data = await productAPI < { products: productI[],total:number}>('search/category', 'GET', null, params);
+  const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('category', 'GET', null, params);
   return data
 }
 
-// export const getProductsBySearch = async () => {
-//     const data = await productAPI < { products: productI[],total:number}>('search/category/productName', 'GET', null);
-//   return data
-// }
-// /search/category/productName
-
-
-// const para = {
-//   name: 'Alex',
-//   age: 11,
-//   t : false
-// }
-
-
-
-// const getQuery = (data: Record<string, any>) => {
-//   const query = new URLSearchParams()
-//   Object.entries(data).forEach(([key, value]) => {
-//     if (value === null) return 
-//     query.set(key, String(value))
-//   })
-//   return query.toString() 
-// }
-// name=Alex&age=11&t=false
-
-// const a = getQuery(para)
-// console.log(a);
+export const getProductsBySearch = async (params : Record<string, any>) => {
+    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search', 'GET', null,params);
+  return data
+}

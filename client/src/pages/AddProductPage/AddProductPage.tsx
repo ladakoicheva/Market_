@@ -1,7 +1,8 @@
-import ProductForm from "../../components/ProductForm/ProductForm"
-import style from '../AddProductPage/AddProductPage.module.css'
+import ProductForm from "../../components/ProductForm/ProductForm";
+import style from '../AddProductPage/AddProductPage.module.css';
+import { AuthHock } from "../../hocks/AuthHock";
 
-export default function AddProductPage() {
+ function AddProductPage() {
   return (
     <div className={style.wrapper}>
     <ProductForm/>
@@ -11,3 +12,5 @@ export default function AddProductPage() {
   
   
 }
+
+export default AuthHock(AddProductPage)

@@ -7,13 +7,15 @@ import Header from './components/Header/Header';
 import Button from './components/Button/Button';
 import { logoutUser } from './features/user/userSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
+import CategProductPage from './pages/AllProductPage/CategProductPage';
 import AddProductPage from './pages/AddProductPage/AddProductPage';
-import AllProductPage from './pages/AllProductPage/AllProductPage';
 import Auth from './features/user/Auth';
 import Modal from './components/Modal/Modal';
 import Page404 from './pages/404Page/Page404';
 import MyProductsPage from './pages/MyProductsPage/MyProductsPage';
 import ProductForm from './components/ProductForm/ProductForm';
+import Category from './pages/Category/Category';
+import SyncCateg from './features/product/SyncCateg';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,21 +26,23 @@ function App() {
   const closeForm = () => setIsFormOpen(false);
 
   const dispatch = useAppDispatch();
-  const { isAuth, mode, isLoadingApp } = useAppSelector((s) => s.user);
+  const { user, mode, isLoadingApp } = useAppSelector((s) => s.user);
   
 
   return (
     <BrowserRouter>
-      {/* {isLoadingApp && <Loader />} */}
+      {isLoadingApp && <Loader />}
         <Auth />
-
+      <SyncCateg />
+      
       <Header>
         <Button
-          onClick={!isAuth ? openModal : () => dispatch(logoutUser())}
-          text={!isAuth ? mode : 'Log Out'}
+          onClick={!user ? openModal : () => dispatch(logoutUser())}
+          text={!user ? mode : 'Log Out'}
           isAsync={false}
         />
       </Header>
+      
       {isFormOpen && (
         <ProductForm closeForm={closeForm } />
       )}
@@ -50,20 +54,19 @@ function App() {
       )}
 
       <Routes>
-        <Route path='/' element={<AllProductPage />} />
-        
+        <Route path='/products/:categ' element={<CategProductPage />} />
+        <Route path='/category' element={ <Category/>} />
         <Route path='*' element={<Page404/>}/>
 
-        {
-          !isLoadingApp && isAuth ?
-           
+     
+        
             <>
-              <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
+            <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
             <Route path='/add' element={<AddProductPage />} />
-            </>:null
+            </>
              
   
-           }
+        
        
         
         </Routes>

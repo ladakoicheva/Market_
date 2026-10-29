@@ -13,7 +13,6 @@ export enum ModeType {
 export interface stateI{
   user: null | userI,
   mode: ModeType;
-  isAuth: Boolean;
   isLoadingApp: Boolean;
 }
 

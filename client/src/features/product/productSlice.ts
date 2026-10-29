@@ -51,7 +51,7 @@ const productSlice = createSlice({
        state.editProduct.isEdit = false;
        const index = state.products.findIndex((p) => p.id === action.payload.id);
        if (index !== -1) {
-      state.products[index] = action.payload; // Заменяем старый продукт новым
+      state.products[index] = action.payload; 
       }
       state.editProduct.product = {
       name: "",
@@ -128,7 +128,8 @@ export const getCategoriesData = createAsyncThunk<
 >(
   'products/getCategories',
   async (_, { dispatch, rejectWithValue }) => {
-    const res = await getCategories()
+    const res = await getCategories();
+    console.log(res)
     
     if (!res.ok) {
       return rejectWithValue({ ok: false, e: res.e });

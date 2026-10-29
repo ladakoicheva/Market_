@@ -9,7 +9,7 @@ type props ={
   openModal:()=>void
 }
 
-export default function ProductCard({ product, closeModal, openModal }: props) {
+export default function ProductCard({ product, closeModal, openModal }: any) {
 
   const dispatch = useDispatch();
   return (

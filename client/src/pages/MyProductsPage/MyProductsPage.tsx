@@ -4,13 +4,13 @@ import style from './MyProductsPage.module.css';
 import Loader from '../../components/Loader/Loader';
 import { useMemo } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import { AuthHock } from '../../hocks/AuthHock';
 
 type props={
   closeModal: () => void,
   openModal:()=>void
 }
-
-export default function MyProductsPage({ openModal, closeModal }: props) {
+ function MyProductsPage({ openModal, closeModal }: any) {
   
   const { products } = useAppSelector((s) => s.productData);
   
@@ -29,4 +29,8 @@ if(products.length <= 0) return  <h1>No products</h1>
     </>
   
   )
-}
+ }
+
+
+
+export default AuthHock(MyProductsPage)

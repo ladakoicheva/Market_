@@ -15,7 +15,8 @@ productRouter.get('/categories', getCategories)
 
 productRouter.patch('/edit', authorize, editProduct)
 
-productRouter.get('/search/category', getProductsByCategory);
+productRouter.get('/category', getProductsByCategory);
+productRouter.get('/search', getProductsByCategoryForSearch);
 
 
 // data, fileName, ...url

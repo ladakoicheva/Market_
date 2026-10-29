@@ -58,16 +58,17 @@ export const editProductCategory = async (oldCategory, newCategory, id) => {
 export const getProductsByCategory = async (req, res) => {
   const page = +req.query.page;
   const limit = +req.query.limit; //10
+  const category = req.query.category;
   let start = (page - 1) * limit;
   let end = start + limit;
-  const productNameSearch = req.query.search;
+  
 
+  
 
-
-  if (productNameSearch) return getProductsByCategoryForSearch(req, res)
 
   try {
-    const getProductsByCateg = await getFile('datas', 'products-all', 'test.json');
+    const getProductsByCateg = await getFile('datas', 'products', category + '.json');
+    console.log(category,limit,page)
 
     /*{
     "id": "f99caba6-59f2-4024-8b6d-74a17b031095", айди продукта
@@ -97,11 +98,11 @@ export const getProductsByCategory = async (req, res) => {
 
     );
 
-    const hasMore = end < getProductsByCateg.data.length
+    const isNext = end < getProductsByCateg.data.length
 
 
 
-    return res.status(200).json(getSuccessReq({ products: getProducts, index: 0, hasMore }));
+    return res.status(200).json(getSuccessReq({ products: getProducts, index: 0, isNext }));
 
   } catch (error) {
     return res.status(500).json(getErrorReq(error));
@@ -122,6 +123,7 @@ export const searchForMatch = async ({ id, email }, search) => {
 
 
 
+
     const parsedData = JSON.parse(res);
 
     if (parsedData.name
@@ -139,12 +141,92 @@ export const searchForMatch = async ({ id, email }, search) => {
 }
 
 
+
+
+
+
 export const getProductsByCategoryForSearch = async (req, res) => {
 
   const limit = +req.query.limit; //10
   let startSearch = +req.query.next || 0;
   let endSearch = startSearch + (limit * 3);
   const productNameSearch = req.query.search;
+  const category = req.query.category
+
+
+
+
+  try {
+    const getProductsByCateg = await getFile('datas', 'products',category+ '.json');
+
+    /*{
+    "id": "f99caba6-59f2-4024-8b6d-74a17b031095", айди продукта
+    "email": "koichevalada@gmail.com" ,
+  },
+  {
+    "email": "wedfr@gmail.com",
+    "id": "901e4618-4c58-406d-8505-f1e3e2ab8dd8"
+  }*/
+
+
+    const productsMatch = [];
+    let isFinish = true
+    let lastIndexProduct = null;
+
+
+
+    while (isFinish) {
+
+
+      const products = getProductsByCateg.data.slice(startSearch, endSearch);
+      
+      if (products.length === 0) isFinish = false;
+
+      await Promise.all(
+        products.map(async (p, i) => {
+          if (productsMatch.length >= limit) return
+          const res = await searchForMatch({ id: p.id, email: p.email }, productNameSearch);
+          if (productsMatch.length >= limit) return
+          
+          if (res) productsMatch.push(res);
+          if (productsMatch.length >= limit) {
+            isFinish = false;
+            lastIndexProduct = startSearch + i + 1;
+          
+          }
+
+        })
+
+
+      )
+      startSearch = endSearch;
+      endSearch += limit * 3;
+
+    }
+
+    console.log(productsMatch.length,'productsMatch')
+    // const total = Math.ceil(productsMatch.length / limit);
+
+    return res.status(200).json(getSuccessReq({ index: lastIndexProduct, products: productsMatch, isNext: !!lastIndexProduct }));
+
+  } catch (error) {
+    return res.status(500).json(getErrorReq(error));
+  }
+
+
+
+
+}
+
+
+export const getAllProductsForSearch = async (req, res) => {
+
+  const limit = +req.query.limit; //10
+  let startSearch = +req.query.next || 0;
+  let endSearch = startSearch + (limit * 3);
+  const productNameSearch = req.query.search;
+  
+
 
 
 
@@ -174,8 +256,10 @@ export const getProductsByCategoryForSearch = async (req, res) => {
       await Promise.all(
         products.map(async (p, i) => {
           if (productsMatch.length >= limit) return
-
+          
           const res = await searchForMatch({ id: p.id, email: p.email }, productNameSearch);
+          if (productsMatch.length >= limit) return
+
           if (res) productsMatch.push(res);
           if (productsMatch.length >= limit) {
             isFinish = false;
@@ -193,10 +277,9 @@ export const getProductsByCategoryForSearch = async (req, res) => {
     }
 
 
-    const hasMore = getProductsByCateg.data.length > lastIndexProduct + 1;
     // const total = Math.ceil(productsMatch.length / limit);
 
-    return res.status(200).json(getSuccessReq({ index: lastIndexProduct, products: productsMatch, hasMore }));
+    return res.status(200).json(getSuccessReq({ index: lastIndexProduct, products: productsMatch, isNext: !!lastIndexProduct }));
 
   } catch (error) {
     return res.status(500).json(getErrorReq(error));
@@ -206,7 +289,6 @@ export const getProductsByCategoryForSearch = async (req, res) => {
 
 
 }
-
 
 // ...?limit=10&page=1
 // ...?limit=10&page=2
