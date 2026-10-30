@@ -32,12 +32,7 @@ const productAPI = async < Response, T = undefined > (url: string = '', type :  
     };
     if (token) headers['Authorization'] = ` ${token}`
     const query = params ? '?' + getQuery(params) : ''
-    // const params = new URLSearchParams(location.search);
-    // const paramsData = { search: params.get('search'), page: params.get('page'), limit: params.get('limit') ,next:params.get('next')}
-    // // {limit : 10, page : 1}
-    
-    // if (paramsData.search || paramsData.limit || paramsData.page) query = `?limit=${paramsData.limit}&page=${paramsData.page}&search=${paramsData.search}&next=${paramsData.next}`;
-    //
+   
     
     const response = await fetch(`${reqLink}/${url}${query}`, {
       method: type,
@@ -88,3 +83,9 @@ export const getProductsBySearch = async (params : Record<string, any>) => {
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search', 'GET', null,params);
   return data
 }
+
+export const getAllProducts = async (params : Record<string, any>) => {
+    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('all', 'GET', null,params);
+  return data
+}
+

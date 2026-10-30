@@ -7,14 +7,14 @@ import Header from './components/Header/Header';
 import Button from './components/Button/Button';
 import { logoutUser } from './features/user/userSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import CategProductPage from './pages/AllProductPage/CategProductPage';
+import CategProductPage from './pages/CategProductPage/CategProductPage';
 import AddProductPage from './pages/AddProductPage/AddProductPage';
 import Auth from './features/user/Auth';
 import Modal from './components/Modal/Modal';
 import Page404 from './pages/404Page/Page404';
 import MyProductsPage from './pages/MyProductsPage/MyProductsPage';
 import ProductForm from './components/ProductForm/ProductForm';
-import Category from './pages/Category/Category';
+import AllProductPage from './pages/AllProductPage/AllProductPage';
 import SyncCateg from './features/product/SyncCateg';
 
 function App() {
@@ -55,19 +55,10 @@ function App() {
 
       <Routes>
         <Route path='/products/:categ' element={<CategProductPage />} />
-        <Route path='/category' element={ <Category/>} />
+        <Route path='/' element={ <AllProductPage/>} />
         <Route path='*' element={<Page404/>}/>
-
-     
-        
-            <>
-            <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
-            <Route path='/add' element={<AddProductPage />} />
-            </>
-             
-  
-        
-       
+        <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
+        <Route path='/add' element={<AddProductPage />} />
         
         </Routes>
       
