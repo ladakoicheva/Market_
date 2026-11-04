@@ -1,7 +1,9 @@
 import type { productI } from "../../features/product/types";
 import style from './ProductCard.module.css';
 import { updateEditProduct } from "../../features/product/productSlice";
-import { useDispatch } from "react-redux";
+import { addToHistory } from "../../api/history";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useNavigate } from "react-router";
 
 type props ={
   product: productI,
@@ -9,9 +11,16 @@ type props ={
   openModal:()=>void
 }
 
-export default function ProductCard({ product, closeModal, openModal }: any) {
+export default function ProductCard({ product, openModal }: any) {
+  const { user } = useAppSelector((s) => s.user);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const buyItem =  async() => {
+    const res = await addToHistory({ owner: user?.email!, products: [product] });
+    if(res.ok)navigate('/history')
+  }
+
   return (
     <div className={style.card}>
       <div className={style.edit}>
@@ -38,6 +47,7 @@ export default function ProductCard({ product, closeModal, openModal }: any) {
       <h1>{product.name}</h1>
       <p>{product.category}</p>
       <p>{product.price}</p>
+      <button className={style.cardBtn} onClick={buyItem}>Buy</button>
     </div>
   )
 }

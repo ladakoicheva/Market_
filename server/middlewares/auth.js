@@ -8,6 +8,7 @@ import { deleteToken } from "../services/tokenService.js";
 export const authorize = async (req, res, next) => {
 
   const token = req.headers.authorization;
+  
   if (!token) return res.status(401).json(getErrorReq('unAuthorized'));
 
   const file = await getFileToken(token);

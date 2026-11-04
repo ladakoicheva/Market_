@@ -1,0 +1,11 @@
+{
+  "products": [
+    {
+      "name": "Samsung Ga",
+      "category": "CLOUTHING",
+      "price": 58,
+      "inStock": true,
+      "id": "f99caba6-59f2-4024-8b6d-74a17b031095"
+    }
+  ]
+}

@@ -92,6 +92,9 @@ export const getAllProducts = async (req, res) => {
 
     );
 
+    
+  
+
     const isNext = end < getProductsByCateg.data.length
 
 

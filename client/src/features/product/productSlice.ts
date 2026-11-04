@@ -50,9 +50,9 @@ const productSlice = createSlice({
      updateProductInList: (state,action) => {
        state.editProduct.isEdit = false;
        const index = state.products.findIndex((p) => p.id === action.payload.id);
-       if (index !== -1) {
+      
       state.products[index] = action.payload; 
-      }
+     
       state.editProduct.product = {
       name: "",
       category:undefined,

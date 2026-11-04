@@ -1,0 +1,11 @@
+{
+  "products": [
+    {
+      "name": "T-Shirt",
+      "category": " CLOUTHING",
+      "price": 3,
+      "inStock": false,
+      "id": "901e4618-4c58-406d-8505-f1e3e2ab8dd8"
+    }
+  ]
+}

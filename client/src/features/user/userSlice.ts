@@ -10,6 +10,7 @@ import { updateProductNoUser } from "../product/productSlice";
 import { getUserProductData } from "../product/productSlice";
 
 
+
 const initialState: stateI = {
 
   user: null,
@@ -117,6 +118,7 @@ export const authorizeUser = createAsyncThunk<
       if (!res.ok) {
         dispatch(changeUserData(null));
         dispatch(updateProductNoUser());
+        
 
         return rejectWithValue({
           ok: false,
@@ -126,7 +128,6 @@ export const authorizeUser = createAsyncThunk<
       dispatch(getUserProductData());
       dispatch(changeUserData(res.data));
     
-      
       return { ok: true };
     } catch (error) {
    

@@ -7,6 +7,7 @@ import { getProductsByCategory } from "../search/controller.js";
 import { editProduct } from "./controller.js";
 import { getProductsByCategoryForSearch } from "../search/controller.js";
 import { getAllProducts } from "../search/controller.js";
+import { getAllProductsForSearch } from "../search/controller.js";
 
 export const productRouter = Router();
 
@@ -18,6 +19,7 @@ productRouter.patch('/edit', authorize, editProduct)
 
 productRouter.get('/category', getProductsByCategory);
 productRouter.get('/search', getProductsByCategoryForSearch);
-productRouter.get('/all',getAllProducts );
+productRouter.get('/all', getAllProducts);
+productRouter.get('/search/all',getAllProductsForSearch)
 
 // data, fileName, ...url

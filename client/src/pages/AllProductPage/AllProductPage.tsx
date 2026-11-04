@@ -1,61 +1,64 @@
 import Category from "../../components/Category/Categories";
-import { useEffect } from "react";
-import type { productI } from "../../features/product/types";
-import { useMemo } from "react";
 import { useState } from "react";
+import { useMemo } from "react";
+import { useProducts } from "../../hooks/useProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import { getAllProducts } from "../../api/products";
 import style from '../CategProductPage/AllProductPage.module.css'
+import { getAllProducts } from "../../api/products";
+import { getProductsSearch } from "../../api/products";
 
-const limit = 10
 
 export default function AllProductPage() {
 
+    const [search, setSearch] = useState('');
+  const { 
+    products : {  productsData } ,
+    getNext,
+    getProductsBySearchDB,
+    isMore,
+   
+  } = useProducts({
+    getProductsAll: getAllProducts,
+    getProductsSearch: getProductsSearch,
+    search,
+    category:null,
+
+    
+  });
   
 
-  const [data, setData] = useState<{
-    products: productI[], index: number,
-    currentPage: number, isNext: boolean
-  }>({
-  products: [],
-  index: 0, 
-  currentPage: 0,
-  isNext:true,
-  });
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+   
+    
+    setSearch(v);
+    getProductsBySearchDB(v)
 
-  const { products, index, currentPage, isNext } = data;
-
+  
+  };
+  
+ 
+    // const {  productsData } = products;
 
     const cards = useMemo(() => {
-      return products.map((p,index) => <ProductCard product={p} key={index}  />)
-    }, [products])
+      return productsData.map((p,index) => <ProductCard product={p} key={index}  />)
+    }, [productsData])
 
 
 
-    useEffect(() => {
-      getProducts();
-    }, []);
-  
-    const getProducts = async () => { 
-      const params = { page :currentPage + 1, limit}
-    
-    const res = await getAllProducts(params);
-    if (res.ok) {
-      const d = res.data;
-      setData(data => ({...data,...d, products : [...data.products, ...d.products], currentPage : data.currentPage + 1}))
-    
-    }
-  };
+   
+ 
   
   
   return (
     <>
-    <Category/>
-   
+ 
+      <input type="text" placeholder='Search...' value={search} onChange={handleSearch} />
+         <Category/>
       <div className={style.grid_template_columns}>
       {cards}
       </div>
-      {isNext && <button onClick={getProducts}>neext</button>} 
+      {isMore && <button onClick={getNext}>neext</button>} 
     </>
   
   )

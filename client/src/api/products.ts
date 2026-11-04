@@ -9,7 +9,7 @@ type headers = {
   'Content-Type': string,
   'Authorization'?:string
 }
-type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
+export type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
 
 
 const getQuery = (data: Record<string, any>) => {
@@ -79,10 +79,18 @@ export const getProductsByCategories = async (params : Record<string, any>) => {
   return data
 }
 
-export const getProductsBySearch = async (params : Record<string, any>) => {
+export const getProductsByCategSearch = async (params : Record<string, any>) => {
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search', 'GET', null,params);
   return data
 }
+
+
+export const getProductsSearch = async (params : Record<string, any>) => {
+    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search/all', 'GET', null,params);
+  return data
+}
+
+
 
 export const getAllProducts = async (params : Record<string, any>) => {
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('all', 'GET', null,params);
