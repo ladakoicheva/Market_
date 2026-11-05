@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { stateI } from "./types";
 import { addProduct } from "../../api/products";
 import type { AppDispatch } from "../../redux/store";
@@ -29,11 +29,11 @@ const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    updateAddProduct: (state,action) => {
+    updateAddProduct: (state,action:PayloadAction<productI>) => {
       const newProduct = action.payload;
       state.products.push(newProduct);
     },
-    updateShowUserProducts: (state, action) => {
+    updateShowUserProducts: (state, action:PayloadAction<productI[]>) => {
       state.products = action.payload
     },
     updateProductNoUser: (state) => {
@@ -42,12 +42,12 @@ const productSlice = createSlice({
     updateCategories: (state, action) => {
       state.categories = action.payload
     },
-    updateEditProduct: (state, action) => {
+    updateEditProduct: (state, action:PayloadAction<productI>) => {
       state.editProduct.isEdit = true;
       state.editProduct.product = action.payload;
     },
     
-     updateProductInList: (state,action) => {
+     updateProductInList: (state,action:PayloadAction<productI>) => {
        state.editProduct.isEdit = false;
        const index = state.products.findIndex((p) => p.id === action.payload.id);
       

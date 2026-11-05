@@ -17,6 +17,7 @@ import ProductForm from './components/ProductForm/ProductForm';
 import AllProductPage from './pages/AllProductPage/AllProductPage';
 import SyncCateg from './features/product/SyncCateg';
 import History from './pages/History/History';
+import HistoryItemPage from './pages/HistoryItemPage/HistoryItemPage';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,7 +61,8 @@ function App() {
         <Route path='*' element={<Page404/>}/>
         <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
         <Route path='/add' element={<AddProductPage />} />
-        <Route path='/history' element={ <History/>} />
+        <Route path='/history' element={<History />} />
+         <Route path='/history/:id' element={ <HistoryItemPage/>} />
         
         </Routes>
       

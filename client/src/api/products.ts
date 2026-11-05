@@ -60,7 +60,7 @@ const productAPI = async < Response, T = undefined > (url: string = '', type :  
   }
 
   export const getUserProducts = async () => {
-  const data = await productAPI<productI>('get', 'GET');
+  const data = await productAPI<productI[]>('get', 'GET');
   return data;
   }
 

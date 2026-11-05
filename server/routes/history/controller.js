@@ -1,5 +1,6 @@
 import { getSuccessReq, getErrorReq } from "../../utils/responseHelpers.js";
-import { setFileDirJSON, getAllFiles } from "../../utils/fs.js";
+import { setFileDirJSON, getAllFiles,getFile } from "../../utils/fs.js";
+
 
 export const addToHistory = async (req, res) => {
   try {
@@ -39,7 +40,24 @@ export const getAllHistory = async (req, res) => {
     const isNext = end < allFiles.data.length;
     console.log(end, limit, isNext);
 
-    return res.status(200).json(getSuccessReq({ history: paginatedHistory, isNext }));
+    return res.status(200).json(getSuccessReq({ products: paginatedHistory, isNext, index:0 }));
+
+  } catch (error) {
+    return res.status(500).json(getErrorReq(error.message));
+  }
+};
+
+export const getHistoryItem = async (req, res) => {
+  try {
+    const email = req.user.email;
+    const id = req.params.id;
+
+
+    const file = await getFile('datas', 'users', email, 'history', id + '.json');
+  
+  
+
+    return res.status(200).json(getSuccessReq(file.data));
 
   } catch (error) {
     return res.status(500).json(getErrorReq(error.message));

@@ -6,15 +6,16 @@ import type { typeResponseAPI } from "../api/products";
 
 const limit = 10;
 
+ 
 
 
 type props = {
-  getProductsAll: (params:Record<string, any>) =>  Promise<typeResponseAPI<{ products: productI[], index: number, isNext:boolean }>>,
-  getProductsSearch: (query: Record<string, any>) => Promise<typeResponseAPI<{ products: productI[], index: number, isNext:boolean }>>,
-  category:string|null,
-  search:string,
+  getProductsAll: (params: Record<string, any>) => Promise<typeResponseAPI<{
+    products: Record<string, any>, index?: number, isNext:boolean }>>,
+  getProductsSearch?: ((query: Record<string, any>) => Promise<typeResponseAPI<{ products:productI[], index: number, isNext: boolean }>>),
+  category?:string,
+  search?:string,
 }
-
 
 export const useProducts = ({ getProductsAll, getProductsSearch, category ,search}:props) => {
 
@@ -23,17 +24,17 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
   const [isSearch, setIsSearch] = useState(false);
 
   const [searchData, setSearchData] = useState<{
-    productsData: productI[],
+    productsData: Record<string, any>[],
     index: number,
     isNext: boolean
   }>({
   productsData: [],
-  index: 0,
+    index: 0,
   isNext:true,
   });
 
     const [data, setData] = useState<{
-      productsData: productI[], index: number,
+      productsData: Record<string, any>[], index: number,
       currentPage: number, isNext: boolean
     }>({
     productsData: [],
@@ -43,14 +44,14 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
     });
   
   
-  
-  
+ 
   const isMore = isSearch ? searchData.isNext : data.isNext;
   
     const handleSearch = async (v : string) => {
    
   
       const query = { limit, next: 0, search: v, category }
+      //@ts-ignore
       const res = await  getProductsSearch(query)
         setIsSearch(v.trim() !== '')
       if (res.ok) {
@@ -65,8 +66,9 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
     };
   const showNextMatchSearch = async () => {
      
-   const query = {limit, next : searchData.index  , search ,category}
-      const res = await getProductsSearch(query);
+    const query = { limit, next: searchData.index, search, category }
+   //@ts-ignore
+      const res = await getProductsSearch(query) ;
       
       if (res.ok) {
         setSearchData((prev)=>({...prev,...res.data, productsData:[...prev.productsData,...res.data.products]}))
@@ -78,15 +80,21 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
    const params = { page: data.currentPage + 1, limit } as Record<string,any>
    if(category) params.category = category
   
-  const res = await getProductsAll(params);
+   const res = await getProductsAll(params);
+  console.log(res)
   if (res.ok) {
-    const d = res.data;
+    const d = res.data as Record<string,any>;
+
+    console.log(d,'d')
     setData(data => ({...data,...d, productsData : [...data.productsData, ...d.products], currentPage : data.currentPage + 1}))
     console.log(res)
   }
 };
     useEffect(() => {
       getProducts();
+      
+  
+
     }, []);
   
   useEffect(() => {
@@ -106,7 +114,6 @@ const products = isSearch ? searchData : data
    
   }
 }
-
 
 
 

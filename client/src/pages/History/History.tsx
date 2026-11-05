@@ -1,61 +1,34 @@
 import { getHistory } from '../../api/history';
 import { useMemo } from 'react';
-import { useEffect } from 'react';
-import type { productI } from '../../features/product/types';
-import { useState } from 'react';
 import { AuthHock } from '../../hocks/AuthHock';
+import { useProducts } from '../../hooks/useProducts';
+import { Link } from 'react-router';
 
- interface orderI {
-  date: string;
-  owner: string;
-  products: productI[];
- }
-const limit = 10;
 
- function History() {
-  
- const [data, setData] = useState<{
-        history: orderI[], 
-        currentPage: number, isNext: boolean
-      }>({
-     history: [],
-      currentPage: 1,
-      isNext:false,
-      });
+function History() {
+
+  const { 
+    products,
+    isMore,
+    getNext,
+  } = useProducts({  getProductsAll:getHistory });
+
+console.log(products)
+
 
   
-  
-  useEffect(() => {
-      history.replaceState(null,'',`?page=${data.currentPage}`)
-    }, [data])
+
+  const list = useMemo(() => {
     
-  
-  useEffect(() => {
+    return products.productsData.map((el:any) => el.products.map((p:any) => <li key={el.date}><Link to = {'/history/'+el.date}>{p.name}</Link></li>))
+  }, [products])
 
-    const getAllHistory = async () => {
-      const res = await getHistory({ limit, page: data.currentPage }) ;
-      if (res.ok) setData({ ...data, ...res.data });
-
-        
-    }
-    getAllHistory()
-  }, [])
-   
-   const showNext = async () => {
-     const res = await getHistory({ limit, page: data.currentPage+1});
-      if (res.ok) setData((prev)=>({ ...prev, ...res.data , history:[...prev.history,...res.data.history],currentPage:prev.currentPage+1}));
-   }
-  
- const list = useMemo(() => {
-   return data.history.map((el) => el.products.map((p) => <li key ={el.date}>{p.name}</li>))
- }, [data])
-  
-   return (<>
-     <ul>{list}</ul>
-     {data.isNext &&  <button onClick={showNext}>next</button>}
+  return (<>
+    <ul>{list}</ul>
+    {isMore && <button onClick={getNext}>next</button>}
   </>
-  
-    
+
+
   )
 }
 

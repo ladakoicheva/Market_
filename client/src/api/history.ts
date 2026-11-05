@@ -59,14 +59,22 @@ const historyAPI = async < Response, T = undefined > (url: string = '', type :  
 } 
 
 
-export const addToHistory = async (purchase:Omit<orderI,'date'>) => {
+export const addToHistory = async (purchase:Record<string, any>) => {
   const data = await historyAPI<orderI, typeof purchase>('add','POST',purchase);
       
   return data;
 }
 
 export const getHistory = async (params : Record<string, any>) => {
-  const data = await historyAPI<{ history: orderI[], isNext:boolean }>('get','GET',null,params);
+  const data = await historyAPI<{ products:orderI[], isNext:boolean,index:number }>('get','GET',null,params);
      
+  return data;
+}
+
+
+export const getHistoryItem = async (id: string) => {
+  
+  const data = await historyAPI<orderI>(`get/${id}`, 'GET', null);
+  
   return data;
 }

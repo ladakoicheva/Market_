@@ -3,7 +3,8 @@ import cors from 'cors';
 import userRouter from './routes/users/route.js';
 import { productRouter } from './routes/products/route.js';
 import { historyRouter } from './routes/history/route.js';
-import { authorize } from './middlewares/auth.js';
+
+import { initDatabase } from './dbSQL/index.js';
 
 const PORT = 3000;
 const app = express();
@@ -17,5 +18,6 @@ app.use('/history', historyRouter);
 
 
 app.listen(PORT, () => {
+//  initDatabase()
   console.log('http://localhost:3000')
 })
