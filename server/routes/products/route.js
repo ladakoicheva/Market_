@@ -8,14 +8,18 @@ import { editProduct } from "./controller.js";
 import { getProductsByCategoryForSearch } from "../search/controller.js";
 import { getAllProducts } from "../search/controller.js";
 import { getAllProductsForSearch } from "../search/controller.js";
+import { getUserProductItem } from "./controller.js";
 
 export const productRouter = Router();
 
 productRouter.post('/add', authorize, addProduct);
 productRouter.get('/get', authorize, getUserProducts);
+productRouter.patch('/edit', authorize, editProduct)
+
+
 productRouter.get('/categories', getCategories)
 
-productRouter.patch('/edit', authorize, editProduct)
+
 
 productRouter.get('/category', getProductsByCategory);
 productRouter.get('/search', getProductsByCategoryForSearch);

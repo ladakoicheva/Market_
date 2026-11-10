@@ -1,32 +1,9 @@
+@reference "../../index.css";
+
 .grid_template_columns {
-  
-  width: 100vw;
-  height: auto;
-  display: grid;
-  padding: 1rem;
-  overflow: hidden;
-  box-sizing: border-box;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 0.2fr));
-  grid-auto-columns: repeat(auto-fit, minmax(20rem, 0.2fr));
-  grid-column-gap: 1rem;
-  grid-auto-rows: 25rem;
-  grid-row-gap: 1rem;
-  justify-items: center;
-  align-items: center;
-  
-}
-
-h1{
-  text-align: center;
-}
-
-@media (max-width:700px) {
-  .grid_template_columns {
-
-    justify-content: center;
-    align-content: center;
-    grid-template-columns: 0.7fr;
-    grid-auto-rows: 25rem;
-    height: auto;
-  }
+  width: 96vw;
+  min-height: 100vh;
+  grid-auto-rows: 30rem;
+  align-self: center;
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 place-items-center p-4;
 }

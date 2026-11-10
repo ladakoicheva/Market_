@@ -1,4 +1,82 @@
+
+@reference "../../index.css";
+
+
+
 .header {
+  background-color: var(--color-mist-950);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  @apply flex justify-between items-center p-5 text-zinc-100 gap-3.5 overflow-hidden;
+}
+
+.logo {
+  --logo-accent: #7ef0c5;
+  @apply flex items-center shrink-0 text-white;
+}
+
+.logo svg {
+  display: block;
+  width: 10rem;
+  height: auto;
+}
+
+.logo svg [data-part="symbol"] {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo svg [data-part="accent"] {
+  fill: none;
+  stroke: var(--logo-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo svg [data-part="wordmark"] {
+  fill: currentColor;
+}
+
+.headerSearch {
+  @apply placeholder-zinc-950 bg-white p-2 flex-1 rounded-lg text-zinc-950 outline-0 border border-zinc-200  focus:ring-pink-500;
+}
+
+.searchContainer {
+  @apply flex items-center flex-1 relative;
+}
+
+.searchContainer input {
+@apply w-full placeholder-zinc-950 bg-white p-2 pl-10 rounded-lg text-zinc-950 outline-0 border border-zinc-200 focus:ring-2 focus:ring-pink-500;
+}
+
+.searchContainer svg {
+  @apply absolute left-3 w-5 h-5 text-zinc-600 pointer-events-none;
+}
+
+.searchContainer:hover svg {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+
+.userInfo{
+  @apply flex items-center gap-2 bg-white/30 backdrop-blur-md border border-white/40 shadow-2xl rounded-3xl p-1 hover:bg-white/20;
+}
+
+.userInfo svg {
+  @apply w-6 h-6 text-zinc-100 shrink-0;
+}
+/* .pages{
+  @apply flex items-center gap-4 shrink-0;
+} */
+
+/* .header {
   margin-bottom: 1rem;
   min-height: 4.3rem;
   display: flex;
@@ -51,4 +129,4 @@
 .pages{
   display: flex;
   gap:15px;
-}
+} */

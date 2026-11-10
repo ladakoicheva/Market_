@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+
+
 :root {
 
   --text: #6b6375;
   --text-h: #08060d;
-  --bg: #fff;
+  --bg: #f3f4f6;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
@@ -13,7 +18,7 @@
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
 
-  --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
 
@@ -69,6 +74,12 @@ body {
 
 svg {
   cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+svg:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {

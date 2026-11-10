@@ -97,3 +97,8 @@ export const getAllProducts = async (params : Record<string, any>) => {
   return data
 }
 
+
+export const getUserProductItem = async (id:string) => {
+    const data = await productAPI < { data: productI }>('get/'+id, 'GET', null);
+  return data
+}

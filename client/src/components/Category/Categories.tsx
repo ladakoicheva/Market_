@@ -1,16 +1,17 @@
 import  { useMemo } from 'react'
 import { useAppSelector } from '../../redux/hooks';
 import { Link } from 'react-router';
+import style from './Category.module.css'
 
 export default function Category() {
   const categories = useAppSelector((s) => s.productData.categories);
 
   const categCards = useMemo(() => {
-    return categories.map((c) => <li key={c.text}><Link to ={`/products/${c.text}`}>{c.text}</Link></li>)
+    return categories.map((c) => <li key={c.text} className={style.categItem}><Link to ={`/products/${c.text}`}>{c.text.toLowerCase()}</Link></li>)
   },[categories])
 
-  console.log(categories,categCards)
+  
   return (
-    <ul>{ categCards}</ul>
+    <ul className={style.categList}>{ categCards}</ul>
   )
 }

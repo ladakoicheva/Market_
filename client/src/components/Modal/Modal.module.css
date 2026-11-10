@@ -1,134 +1,65 @@
+@reference "../../index.css";
+
 .blur {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  z-index: 99;
-  padding: 1rem;
+  @apply fixed inset-0 z-[99] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm;
 }
 
 .modal {
-
-  z-index: 100;
-  position: relative;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.6rem;
-  align-items: center;
-  background: rgb(230, 215, 215);
-  max-width: 28.1rem;
-  width: 96%;
-  border-radius: 0.5rem;
-  aspect-ratio: 1/1;
-  box-sizing: border-box;
-
-
-
+  @apply relative z-[100] flex max-h-[calc(100dvh-2rem)] w-full max-w-xl flex-col overflow-y-auto rounded-2xl bg-white p-6 text-zinc-900 sm:p-10;
 }
 
 .modal form {
-  width: 100%;
-  padding-top: 0.3rem;
-  padding-bottom: 0.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  @apply flex w-full flex-col items-center gap-6 p-1.5 text-center;
+}
+
+.modal form label {
+  @apply w-full max-w-md text-sm font-medium text-zinc-600;
 }
 
 .authText {
-  width: 100%;
-  text-align: center;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  @apply truncate text-center text-zinc-800;
 }
 
 .authText span {
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: 500;
+  @apply cursor-pointer font-bold text-zinc-800 underline;
 }
 
 .authText span:hover {
-  color: gray;
+  @apply text-gray-500;
 }
-
 
 .modal input {
-  border-radius: 8px;
-  max-width: 18.75rem;
-  width: 90%;
-  box-sizing: border-box;
-  background: transparent;
-  outline: none;
-  border: 1px solid black;
-  padding: 0.75rem 1rem;
-    font-size: 1rem;
-  color: gray;
-}
-
-.modal input::placeholder {
-  color: gray
+  @apply w-full min-w-0 rounded-lg border border-zinc-400 bg-white p-2 text-zinc-950 placeholder-zinc-950 outline-none;
 }
 
 .modal input:focus {
-  border: 1px solid rgb(203, 123, 123);
+  @apply border-pink-500 ring-2 ring-pink-200;
 }
 
 .modal input.err {
-  border: 1px solid red;
+  @apply border-rose-500;
+}
+
+.err {
+  @apply border-rose-500;
 }
 
 .modalItem {
-
-  max-width: 28.1rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+  @apply flex w-full max-w-md items-center justify-center;
 }
 
-
-
 .close {
-  position: absolute;
-  right: 0.3rem;
-  top: 0;
-  cursor: pointer;
+  @apply absolute right-3 top-2 cursor-pointer text-2xl leading-none text-zinc-500 transition-colors;
 }
 
 .close:hover {
-  color: gray;
+  @apply text-zinc-800;
 }
 
 .errors {
-  position: relative;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-  color: rgba(235, 64, 64, 0.8);
-  border-radius: 0.2rem;
-  width: 70%;
-  padding: 0.2rem;
-  padding-left: 2rem;
-  font-size: 0.7rem;
+  @apply relative w-full max-w-md min-w-0 truncate rounded-sm px-1 py-0.5 pl-6 text-xs leading-4 text-rose-600;
 }
 
 .errors svg {
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
+  @apply absolute left-1 top-1/2 -translate-y-1/2;
 }

@@ -18,6 +18,6 @@ app.use('/history', historyRouter);
 
 
 app.listen(PORT, () => {
-//  initDatabase()
+ initDatabase()
   console.log('http://localhost:3000')
 })

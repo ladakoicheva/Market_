@@ -1,4 +1,69 @@
-.card {
+
+@reference "../../index.css";
+
+
+.card{
+  
+  width: 100%;
+  height: 100%;
+  @apply flex flex-col bg-white p-2 rounded-2xl  shadow-2xl font-stretch-90%;
+  justify-content: space-between;
+
+}
+
+.edit{
+  position: absolute;
+  top:5px;
+  left: 5px;
+}
+
+.productInfo{
+  @apply flex min-w-0 items-center justify-between gap-3 px-2  ;
+}
+
+.productName {
+  @apply min-w-0 truncate text-xl font-semibold leading-snug  text-slate-900;
+}
+
+.productPrice {
+  @apply shrink-0 text-xl font-bold  text-violet-700;
+}
+
+.productCurrency {
+  @apply ml-0.5 text-xl font-medium text-slate-500;
+}
+.image{
+  
+  position: relative;
+  width: 100%;
+  height: 60%;
+  @apply  bg-slate-100 rounded-2xl mb-2
+    
+}
+
+.isInStock{
+  @apply absolute bottom-0 right-0 rounded-4xl p-2.5 font-stretch-90% text-white;
+}
+
+.stockAvailable {
+  @apply bg-emerald-600;
+}
+
+.stockUnavailable {
+  @apply bg-rose-600;
+}
+
+.card button{
+
+}
+
+
+
+/* .card h1{
+  @apply text-3xl text-center font-bold;
+} */
+
+/* .card {
   position: relative;
   height: 100%;
   width: 100%;
@@ -8,7 +73,7 @@
   flex-wrap: wrap;
   flex-direction: column;
   overflow: hidden;
- 
+ color:black;
  
 
 }
@@ -33,4 +98,4 @@
  bottom: 10px;
  width: 96%;
 
-}
+} */

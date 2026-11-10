@@ -13,7 +13,7 @@ type props = {
   getProductsAll: (params: Record<string, any>) => Promise<typeResponseAPI<{
     products: Record<string, any>, index?: number, isNext:boolean }>>,
   getProductsSearch?: ((query: Record<string, any>) => Promise<typeResponseAPI<{ products:productI[], index: number, isNext: boolean }>>),
-  category?:string,
+  category?: string|null,
   search?:string,
 }
 

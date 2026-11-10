@@ -1,10 +1,8 @@
-
+import UserProfile from './pages/UserProfile/UserProfile';
 import { BrowserRouter, Routes, Route } from 'react-router';
-import './App.css';
 import { useState } from 'react';
 import Loader from './components/Loader/Loader';
 import Header from './components/Header/Header';
-import Button from './components/Button/Button';
 import { logoutUser } from './features/user/userSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import CategProductPage from './pages/CategProductPage/CategProductPage';
@@ -18,6 +16,9 @@ import AllProductPage from './pages/AllProductPage/AllProductPage';
 import SyncCateg from './features/product/SyncCateg';
 import History from './pages/History/History';
 import HistoryItemPage from './pages/HistoryItemPage/HistoryItemPage';
+import ProductItemPage from './pages/ProductItemPage/ProductItemPage';
+import style from './App.module.css';
+
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,11 +39,15 @@ function App() {
       <SyncCateg />
       
       <Header>
-        <Button
+        <button
+          className={`${style.registerBTN} ${user ? style.logoutButton : style.loginButton}`}
           onClick={!user ? openModal : () => dispatch(logoutUser())}
-          text={!user ? mode : 'Log Out'}
-          isAsync={false}
-        />
+        >
+           {!user ? mode : 'Log Out'}
+        </button>
+        
+         
+        
       </Header>
       
       {isFormOpen && (
@@ -57,12 +62,14 @@ function App() {
 
       <Routes>
         <Route path='/products/:categ' element={<CategProductPage />} />
+        <Route path='/productItem/:id' element={<ProductItemPage/> } />
         <Route path='/' element={ <AllProductPage/>} />
         <Route path='*' element={<Page404/>}/>
         <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
         <Route path='/add' element={<AddProductPage />} />
         <Route path='/history' element={<History />} />
-         <Route path='/history/:id' element={ <HistoryItemPage/>} />
+        <Route path='/history/:id' element={<HistoryItemPage />} />
+        <Route path='/me' element={<UserProfile/>} />
         
         </Routes>
       

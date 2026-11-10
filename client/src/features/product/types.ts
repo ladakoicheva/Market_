@@ -15,7 +15,7 @@ export interface productI {
   category:  CategoriesE | undefined,
   price: number,
   id: string,
-  owner: string;
+  owner?: string;
   inStock: boolean;
   oldCategory?:string
 }

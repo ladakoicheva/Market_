@@ -3,14 +3,14 @@ const config = {
   host: 'localhost',
   port: 3306,
   user: 'root',
-  password : ''
+  password: ''
 }
 
 
 const DB = mysql.createPool({
   ...config,
   database: 'marketpalce',
-  waitForConnections : true
+  waitForConnections: true
 })
 
 export const initDatabase = async () => {
@@ -21,19 +21,89 @@ export const initDatabase = async () => {
         CREATE DATABASE IF NOT EXISTS marketpalce
       `)
   } catch (e) {
-    
+
   }
   await connect.end();
 
   await DB.query(`
-      CREATE TABLE IF NO EXISTS users (
-      email VARCHAR(255) NO NULL UNIQUE,
-      PASSWORD VARCHAR(255) NO NULL,
-      id INT AUTO_INCREMENT PRIMARY KEY 
-      role VARCHAR(50)
+      CREATE TABLE IF NOT EXISTS users (
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      role ENUM('user', 'admin', 'client', 'sale')
       )
     `)
   
+  await DB.query('DROP TABLE IF EXISTS products')
+  await DB.query(`
+      CREATE TABLE IF NOT EXISTS products (
+      name VARCHAR(255) NOT NULL,
+      category VARCHAR(255) NOT NULL,
+      price DECIMAL(10, 2) NOT NULL,
+      inStock BOOLEAN NOT NULL,
+      id INT AUTO_INCREMENT PRIMARY KEY
+      )
+    `)
+
+
   console.log('create table and db')
 
 }
+// {
+//   "name": "kkq",
+//     "category": " CLOUTHING",
+//       "price": 3,
+//         "inStock": false,
+//           "id": "791fa8e6-eb38-4cb8-b22d-460cfbed5ac5"
+// }
+
+const createUserDB = async (user) => {
+  user = {
+    email: 'use2r@gmail.com',
+    password: 'weqqeqq',
+    role: 'client'
+  }
+
+  const res = await DB.execute(
+    `INSERT INTO users(email, password, role)
+     VALUES (?, ?, ?)
+    `,
+    [user.email, user.password, user.role]
+  )
+
+  console.log(res)
+}
+
+
+const createProductDB = async (product) => {
+  product = {
+
+    name: "Samsung Ga",
+    category: "CLOUTHING",
+    price: 58,
+    inStock: false,
+  }
+
+  
+
+  // const res = await DB.execute(
+  //   `INSERT INTO products(name, category, price, inStock)
+  //    VALUES (?, ?, ?, ?)
+  //   `,
+  //   [product.name, product.category, product.price, product.inStock]
+  // )
+
+  console.log(res)
+}
+//createProductDB()
+
+
+const getAllUsersDB = async () => {
+
+  const res = await DB.query(
+    `SELECT * FROM users`
+  )
+  console.log(res)
+}
+//getAllUsersDB()
+//createUserDB()

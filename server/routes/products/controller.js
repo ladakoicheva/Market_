@@ -41,11 +41,19 @@ export const getUserProducts = async (req, res) => {
   //  "inStock": true,
   //
   // }
-  const {email } = req.user
+  const { email } = req.user;
   const result = await getAllFiles('datas', 'users', email, 'products');
   if (!result.ok) return res.status(500).json({ ok: false, e: result.e });
   return res.status(200).json({ ok: true, data: result.data});
   
+}
+
+export const getUserProductItem = async (req, res) => {
+
+  const id = req.params.id;
+  const product = await getFile('datas', 'users', email, 'products', id + '.json');
+  if (!product.ok) return res.status(500).json({ ok: false, e: product.e });
+  return res.status(200).json({ ok: true, data: product.data });
 }
 
 
@@ -79,3 +87,7 @@ export const getCategories = async (req, res) => {
   if (categories.ok) return res.status(200).json(categories);
   return res.status(500).json(getErrorReq(null));
 }
+
+
+
+

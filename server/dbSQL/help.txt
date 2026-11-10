@@ -1,0 +1,7 @@
+VARCHAR(255)     - єто будет строка и вней макс 255
+INT
+AUTO_INCREMENT - авто созданеи уникального айди 
+DECIMAL(10, 2) - єто число от 1 symbol - 10 symbol and 0 - 2 symbol after , 
+121.12 112
+DEFAULT ..  FALSE 100 Alex
+

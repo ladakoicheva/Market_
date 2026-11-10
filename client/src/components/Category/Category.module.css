@@ -1,0 +1,12 @@
+@reference "../../index.css";
+
+
+.categList{
+  width: 90%;
+
+  @apply   self-center flex overflow-auto justify-center gap-10 p-2
+}
+
+.categItem {
+  @apply rounded-2xl bg-violet-600 p-2 text-white transition-colors duration-200 hover:bg-violet-700;
+}
