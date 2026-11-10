@@ -1,7 +1,156 @@
-VARCHAR(255)     - єто будет строка и вней макс 255
+
+config/db.js — отвечает только за то, где база и как к ней подключиться.
+
+models/*.js — функции, которые умеют делать конкретные действия с одной таблицей: getProducts(), createUser().
+
+config.js  - конфиги ,модуль дб
+
+
+
+
+
+
+основные типы данных:
+
+1. Числовые типы:
+VARCHAR(255)     - это будет строка и в ней макс 255
 INT
-AUTO_INCREMENT - авто созданеи уникального айди 
-DECIMAL(10, 2) - єто число от 1 symbol - 10 symbol and 0 - 2 symbol after , 
-121.12 112
-DEFAULT ..  FALSE 100 Alex
+DECIMAL(10, 2) - это число от 1 symbol - 10 symbol и 0 - 2 символов after , 121.12 112
+
+2.Строковые и текстовые типы
+
+VARCHAR(255) — Строка переменной длины (до 255 символов). Для имен, email, заголовков.
+
+TEXT / LONGTEXT — Большие текстовые блоки (для статей, длинных описаний, HTML-кода).
+
+ENUM(...) — Строгий набор разрешенных значений (например, роли: 'user', 'admin', 'client'). Защищает от опечаток.
+
+
+3. Логический тип
+BOOLEAN 
+
+4. Дата и время
+DATE — Только дата (например, 2026-06-06).
+
+DATETIME — Дата и точное время (для фиксации времени создания заказа или регистрации).
+
+
+
+5. Модификаторы и служебные правила ( настройки полей)
+
+AUTO_INCREMENT — Автоматическое увеличение числа на 1 для каждого нового ID.
+
+DEFAULT — Значение по умолчанию, которое подставляется в колонку само, если при создании записи туда ничего не передали.
+
+
+
+
+
+
+
+
+
+Подключение ГАЙД
+
+1. устанавливаем/импортим модуль import mysql from 'mysql2/promise';
+
+2.Настроить конфиг
+
+это объект вида
+
+export const dbConfig = {
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: ''
+};
+
+
+3.создать пул соединений 
+
+принимает конфиг настройки и прочее
+
+export const DB = mysql.createPool({
+  ...dbConfig,
+  database: 'marketplace', // Имя твоей базы данных
+  waitForConnections: true,  // Ждать свободное соединение, если все заняты
+  connectionLimit: 10,     // Максимум одновременных подключений
+  queueLimit: 0            // Без лимита на очередь ожидающих запросов
+});
+
+возвращает объект с методами для работы с бд
+
+
+4.инициализация
+
+1.подключение к бд
+2.запрос если бд не существует создай 
+3. завершение соеденения
+4.создание таблиц в нашей бд
+
+
+export const initDatabase = async () => {
+  const connect = await mysql.createConnection(config)
+
+  try {
+    await connect.query(`
+        CREATE DATABASE IF NOT EXISTS marketpalce
+      `)
+  } catch (e) {
+
+  } finally {
+      await connect.end();
+  }
+
+
+  await DB.query(`
+      CREATE TABLE IF NOT EXISTS users (
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      role ENUM('user', 'admin', 'client', 'seller')
+      )
+    `)
+
+  // await DB.query(`ALERT TABLE users 
+  //   RENAME COLUMN PASSWORD TO password`)
+
+  // console.log(v)
+  /// await DB.query('DROP TABLE IF EXISTS products')
+  await DB.query(`
+      CREATE TABLE IF NOT EXISTS products (
+      name VARCHAR(255) NOT NULL,
+      category VARCHAR(255) NOT NULL,
+      price DECIMAL(10, 2) NOT NULL,
+      inStock BOOLEAN NOT NULL,
+      id INT AUTO_INCREMENT PRIMARY KEY
+      )
+    `)
+
+
+  console.log('create table and db')
+
+}
+
+
+5.cоздание таблиц
+
+создай таблицу если не существует НАЗВАНИЕ 
+имя колонки тип данных  модификатор  уникальность/праймари 
+
+6.Команды
+
+Выбрать все данные с таблицы: SELECT * FROM table
+добавить данные в таблицу : INSERT INTO users(email, password, role)
+     VALUES (?, ?, ?)
+получить выборку : SELECT * FROM table WHERE <значение колонки> = 'значение'
+получить выборку где хоть одно упоминание : SELECT * FROM table LIKE '% значение %'
+
+
+переменовать : ALERT TABLE <название>
+  //   RENAME COLUMN <название> TO <новое название>
+
+
+
+
 

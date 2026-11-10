@@ -3,8 +3,7 @@ import cors from 'cors';
 import userRouter from './routes/users/route.js';
 import { productRouter } from './routes/products/route.js';
 import { historyRouter } from './routes/history/route.js';
-
-import { initDatabase } from './dbSQL/index.js';
+import { initDatabase } from './dbSQL/init.js';
 
 const PORT = 3000;
 const app = express();
