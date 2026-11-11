@@ -71,6 +71,7 @@ const searchValue = searchParams.get('search')||"";
   
   return (
     <>
+      <h1 className={style.category}>{categ}</h1>
       {/* <input type="text" placeholder='Search...' value={search} onChange={handleSearch}/> */}
       <div className={style.grid_template_columns}>
       {cards}

@@ -47,7 +47,7 @@ export default function SignInForm({ closeModal }: Props) {
           <label htmlFor="email">Email</label>
           <div className={style.modalItem} >
             <Field
-              className ={touched.email && errors.email|| backError ? style.err : ''}
+              aria-invalid={(touched.email && !!errors.email) || !!backError}
               id="email"
               type="email"
               name="email"
@@ -67,9 +67,9 @@ export default function SignInForm({ closeModal }: Props) {
           )}
 
           <label htmlFor="password">Password</label>
-          <div className={`${style.modalItem} ${touched.password && errors.password || backError ? style.err : ''}`}>
+          <div className={style.modalItem}>
             <Field 
-              className ={touched.password && errors.password || backError? style.err : ''}
+              aria-invalid={(touched.password && !!errors.password) || !!backError}
               id="password"
               type="password"
               name="password"

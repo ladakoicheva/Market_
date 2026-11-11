@@ -1,34 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@theme {
+  /* бренд */
+  --color-brand: var(--color-violet-600);
+  --color-brand-hover: var(--color-violet-700);
+  --color-brand-ring: var(--color-violet-500);
 
+  /* состояния */
+  --color-danger: var(--color-rose-600);
+  --color-danger-hover: var(--color-rose-700);
+  --color-danger-border: var(--color-rose-500);
+  --color-success: var(--color-emerald-600);
+
+  /* поверхности */
+  --color-page: var(--color-zinc-850);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-slate-100);
+  --color-header: var(--color-mist-950);
+  --color-overlay: rgb(0 0 0 / 0.8);
+
+  /* текст */
+  --color-body: var(--color-zinc-300);
+  --color-ink: var(--color-zinc-950);
+  /* заголовки */
+  --color-ink-soft: var(--color-zinc-800);
+  /* основной текст */
+  --color-ink-muted: var(--color-zinc-500);
+  /* подписи, placeholder */
+  --color-on-brand: var(--color-white);
+  --color-on-header: var(--color-zinc-100);
+
+  /* линии */
+  --color-line: var(--color-zinc-200);
+  --color-line-strong: var(--color-zinc-400);
+
+  /* шрифты */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+}
 
 :root {
-
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #f3f4f6;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-
-  --font-main: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-
-  font-family: var(--font-main);
-
   line-height: 1.45;
   letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background-color: var(--bg);
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -36,31 +51,19 @@
 }
 
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  /* outline: 1px solid black; */
-}
-
-
 html {
-
   font-size: 100%;
   height: 100%;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+*{
+  box-sizing: border-box;
 }
 
 body {
+  background-color: var(--color-page);
+  color: var(--color-body);
   font-size: 1rem;
-
-  font-family: var(--font-main);
-  color: var(--text);
-  min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -85,7 +88,5 @@ svg:hover {
 @media (max-width: 768px) {
   html {
     font-size: 87.5%;
-
   }
-
 }

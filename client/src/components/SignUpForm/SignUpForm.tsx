@@ -47,7 +47,7 @@ export default function SignUpForm({ closeModal }: Props) {
         <Form>
           <label htmlFor="email">Email</label>
           <div className={style.modalItem}>
-            <Field id="email" type="email" name="email" placeholder="Email" className ={touched.email && errors.email ? style.err : ''}/>
+            <Field id="email" type="email" name="email" placeholder="Email" aria-invalid={touched.email && !!errors.email}/>
           </div>
           {touched.email && errors.email && (
             <div className={style.errors}>
@@ -63,7 +63,7 @@ export default function SignUpForm({ closeModal }: Props) {
           <label htmlFor="password">Password</label>
           <div className={style.modalItem}>
             <Field
-              className ={touched.password && errors.password ? style.err : ''}
+              aria-invalid={touched.password && !!errors.password}
               id="password"
               type="password"
               name="password"
@@ -83,7 +83,7 @@ export default function SignUpForm({ closeModal }: Props) {
           <label htmlFor="confirmPassword">Confirm Password</label>
           <div className={style.modalItem}>
             <Field id="confirmPassword" type="password" name="confirmPassword" placeholder="Confirm"
-              className={touched.confirmPassword && errors.confirmPassword  ? style.err : ''} />
+              aria-invalid={touched.confirmPassword && !!errors.confirmPassword} />
           </div>
           {touched.confirmPassword && errors.confirmPassword && (
             <div className={style.errors}>

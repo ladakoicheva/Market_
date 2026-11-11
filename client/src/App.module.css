@@ -6,23 +6,23 @@
   padding-inline: --spacing(5);
   padding-block: --spacing(2);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-white);
+  color: var(--color-on-brand);
   box-shadow: var(--shadow-md);
   transition: background-color 0.2s ease;
 }
 
 .loginButton {
-  background-color: var(--color-violet-600);
+  background-color: var(--color-brand);
 }
 
 .loginButton:hover:not(:disabled) {
-  background-color: var(--color-violet-700);
+  background-color: var(--color-brand-hover);
 }
 
 .logoutButton {
-  background-color: var(--color-rose-600);
+  background-color: var(--color-danger);
 }
 
 .logoutButton:hover:not(:disabled) {
-  background-color: var(--color-rose-700);
+  background-color: var(--color-danger-hover);
 }

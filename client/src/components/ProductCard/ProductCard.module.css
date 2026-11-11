@@ -6,7 +6,7 @@
   
   width: 100%;
   height: 100%;
-  @apply flex flex-col bg-white p-2 rounded-2xl  shadow-2xl font-stretch-90%;
+  @apply flex flex-col bg-surface p-2 rounded-2xl  shadow-2xl font-stretch-90%;
   justify-content: space-between;
 
 }
@@ -22,35 +22,35 @@
 }
 
 .productName {
-  @apply min-w-0 truncate text-xl font-semibold leading-snug  text-slate-900;
+  @apply min-w-0 truncate text-xl font-semibold leading-snug  text-ink;
 }
 
 .productPrice {
-  @apply shrink-0 text-xl font-bold  text-violet-700;
+  @apply shrink-0 text-xl font-bold  text-brand-hover;
 }
 
 .productCurrency {
-  @apply ml-0.5 text-xl font-medium text-slate-500;
+  @apply ml-0.5 text-xl font-medium text-ink-muted;
 }
 .image{
   
   position: relative;
   width: 100%;
   height: 60%;
-  @apply  bg-slate-100 rounded-2xl mb-2
+  @apply  bg-surface-muted rounded-2xl mb-2
     
 }
 
 .isInStock{
-  @apply absolute bottom-0 right-0 rounded-4xl p-2.5 font-stretch-90% text-white;
+  @apply absolute bottom-0 right-0 rounded-4xl p-2.5 font-stretch-90% text-on-brand;
 }
 
 .stockAvailable {
-  @apply bg-emerald-600;
+  @apply bg-success;
 }
 
 .stockUnavailable {
-  @apply bg-rose-600;
+  @apply bg-danger;
 }
 
 .card button{
@@ -91,6 +91,7 @@
   position: absolute;
   right: 5px;
   top: 5px;
+  @apply text-brand transition-colors hover:text-brand-hover;
 }
 
 .cardBtn{

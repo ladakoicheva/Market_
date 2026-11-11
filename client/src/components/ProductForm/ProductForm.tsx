@@ -63,8 +63,7 @@ export default function ProductForm({closeForm}:props) {
           <label htmlFor="name">Name</label>
           <div className={style.modalItem} >
             <Field
-              
-              className ={touched.name && errors.name|| backError ? style.err : ''}
+              aria-invalid={(touched.name && !!errors.name) || !!backError}
               id="name"
               type="name"
               name="name"
@@ -84,10 +83,10 @@ export default function ProductForm({closeForm}:props) {
           )}
 
           <label htmlFor="category">Category</label>
-          <div className={`${style.modalItem} ${touched.category && errors.category || backError ? style.err : ''}`}>
+          <div className={style.modalItem}>
             <Field 
               as="select"
-              className ={touched.category && errors.category ? style.err : ''}
+              aria-invalid={(touched.category && !!errors.category) || !!backError}
               id="category"
               type="category"
               name="category"
@@ -112,10 +111,10 @@ export default function ProductForm({closeForm}:props) {
             </div>
           )}
           <label htmlFor="price">Price</label>
-          <div className={`${style.modalItem} ${touched.price && errors.price || backError ? style.err : ''}`}>
+          <div className={style.modalItem}>
             <Field 
               type="number"
-              className ={touched.price && errors.price ? style.err : ''}
+              aria-invalid={(touched.price && !!errors.price) || !!backError}
               id="price"
               name="price"
               placeholder="Price"

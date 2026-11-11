@@ -4,15 +4,25 @@
 .registerBTN {
   align-self: center;
   width: 96%;
-  @apply inline-flex items-center justify-center rounded-xl bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-200 cursor-pointer;
+  @apply relative inline-flex items-center justify-center rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-on-brand shadow-sm transition-colors duration-200 cursor-pointer;
+}
+
+.registerBTN[aria-busy="true"] {
+  @apply text-transparent;
+}
+
+.registerBTN[aria-busy="true"]::after {
+  content: "";
+  animation-duration: 0.6s;
+  @apply absolute size-5 rounded-full border-2 border-on-brand border-t-transparent motion-safe:animate-spin;
 }
 
 .registerBTN:hover:not(:disabled) {
-  @apply bg-violet-700;
+  @apply bg-brand-hover;
 }
 
 .registerBTN:focus-visible {
-  @apply outline-none ring-2 ring-violet-500 ring-offset-2;
+  @apply outline-none ring-2 ring-brand-ring ring-offset-2;
 }
 
 .registerBTN:disabled {

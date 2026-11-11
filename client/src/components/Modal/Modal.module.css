@@ -1,11 +1,11 @@
 @reference "../../index.css";
 
 .blur {
-  @apply fixed inset-0 z-99 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm;
+  @apply fixed inset-0 z-99 flex items-center justify-center bg-overlay p-4 backdrop-blur-sm;
 }
 
 .modal {
-  @apply relative z-100 flex max-h-[calc(100dvh-2rem)] w-full max-w-xl flex-col overflow-y-auto rounded-2xl bg-white p-6 text-zinc-900 sm:p-10;
+  @apply relative z-100 flex max-h-[calc(100dvh-2rem)] w-full max-w-xl flex-col overflow-y-auto rounded-2xl bg-surface p-6 text-ink-soft sm:p-10;
 }
 
 .modal form {
@@ -13,35 +13,23 @@
 }
 
 .modal form label {
-  @apply w-full max-w-md text-sm font-medium text-zinc-600;
+  @apply w-full max-w-md text-sm font-medium text-ink-muted;
 }
 
 .authText {
-  @apply truncate text-center text-zinc-800;
+  @apply truncate text-center text-ink-soft;
 }
 
 .authText span {
-  @apply cursor-pointer font-bold text-zinc-800 underline;
+  @apply cursor-pointer font-bold text-ink-soft underline;
 }
 
 .authText span:hover {
-  @apply text-gray-500;
+  @apply text-ink-muted;
 }
 
 .modal input {
-  @apply w-full min-w-0 rounded-lg border border-zinc-400 bg-white p-2 text-zinc-950 placeholder-zinc-950 outline-none;
-}
-
-.modal input:focus {
-  @apply border-pink-500 ring-2 ring-pink-200;
-}
-
-.modal input.err {
-  @apply border-rose-500;
-}
-
-.err {
-  @apply border-rose-500;
+  @apply w-full min-w-0 rounded-lg border border-line-strong bg-surface p-2 text-ink placeholder-ink outline-none focus-visible:border-brand-ring focus-visible:ring-2 focus-visible:ring-brand-ring/30 aria-invalid:border-danger-border aria-invalid:ring-2 aria-invalid:ring-danger-border/30;
 }
 
 .modalItem {
@@ -49,15 +37,15 @@
 }
 
 .close {
-  @apply absolute right-3 top-2 cursor-pointer text-2xl leading-none text-zinc-500 transition-colors;
+  @apply absolute right-3 top-2 cursor-pointer text-2xl leading-none text-ink-muted transition-colors;
 }
 
 .close:hover {
-  @apply text-zinc-800;
+  @apply text-ink-soft;
 }
 
 .errors {
-  @apply relative w-full max-w-md min-w-0 truncate rounded-sm px-1 py-0.5 pl-6 text-xs leading-4 text-rose-600;
+  @apply relative w-full max-w-md min-w-0 truncate rounded-sm px-1 py-0.5 pl-6 text-xs leading-4 text-danger;
 }
 
 .errors svg {

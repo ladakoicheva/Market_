@@ -2,11 +2,11 @@
 
 
 .categList{
-  width: 90%;
+  width: auto;
 
-  @apply   self-center flex overflow-auto justify-center gap-10 p-2
+  @apply   flex overflow-auto  gap-10 p-2 truncate min-w-0
 }
 
 .categItem {
-  @apply rounded-2xl bg-violet-600 p-2 text-white transition-colors duration-200 hover:bg-violet-700;
+  @apply rounded-2xl bg-brand p-2 text-on-brand transition-colors duration-200 hover:bg-brand-hover;
 }

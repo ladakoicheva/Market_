@@ -1,7 +1,6 @@
 import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
 import { store } from './redux/store.ts';
-import 'modern-normalize/modern-normalize.css';
 import './index.css'
 import App from './App.tsx'
 

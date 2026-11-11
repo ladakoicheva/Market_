@@ -1,4 +1,4 @@
-import Category from "../../components/Category/Categories";
+import { useState } from "react";
 import { useSearchParams } from "react-router";
 import { useEffect, useMemo } from "react";
 import { useProducts } from "../../hooks/useProducts";
@@ -8,11 +8,14 @@ import style from '../AllProductPage/AllProductPage.module.css'
 import { getAllProducts } from "../../api/products";
 import { getProductsSearch } from "../../api/products";
 import type { productI } from "../../features/product/types";
+import FilterIcon from "../../icons/FilterIcon";
+import FilterModal from "../../components/FilterModal/FilterModal";
 
 
 export default function AllProductPage() {
 
   const [searchParams] = useSearchParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // const [search, setSearch] = useState('');
  
 const searchValue = searchParams.get('search')||"";
@@ -60,16 +63,16 @@ const searchValue = searchParams.get('search')||"";
     }, [productsData])
 
 
-
-   
- 
-  
   
   return (
     <>
- 
+      <div className={style.filter}>
+        <div onClick={()=>setIsModalOpen(!isModalOpen)}><FilterIcon /></div>
+        {isModalOpen && <FilterModal />}
+      </div>
+
       {/* <input type="text" placeholder='Search...' value={search} onChange={handleSearch} /> */}
-         <Category/>
+      
       <div className={style.grid_template_columns}>
       {cards}
       </div>
