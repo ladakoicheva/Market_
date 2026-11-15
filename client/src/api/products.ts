@@ -59,12 +59,13 @@ const productAPI = async < Response, T = undefined > (url: string = '', type :  
     return data;
   }
 
-  export const getUserProducts = async () => {
+export const getUserProducts = async () => {
+      console.log(2) //!
   const data = await productAPI<productI[]>('get', 'GET');
   return data;
   }
 
-  export const getCategories = async () => {
+export const getCategories = async () => {
   const data = await productAPI('categories', 'GET');
   return data;
   }
@@ -74,31 +75,36 @@ export const editProduct = async (product:productI) => {
   return data;
 }
   
-export const getProductsByCategories = async (params : Record<string, any>) => {
+export const getProductsByCategories = async (params: Record<string, any>) => {
+    console.log(4)
   const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('category', 'GET', null, params);
   return data
 }
 
-export const getProductsByCategSearch = async (params : Record<string, any>) => {
+export const getProductsByCategSearch = async (params: Record<string, any>) => {
+    console.log(5)
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search', 'GET', null,params);
   return data
 }
 
 
-export const getProductsSearch = async (params : Record<string, any>) => {
+export const getProductsSearch = async (params: Record<string, any>) => {
+  console.log(9)
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search/all', 'GET', null,params);
   return data
 }
 
 
 
-export const getAllProducts = async (params : Record<string, any>) => {
+export const getAllProducts = async (params: Record<string, any>) => {
+    console.log(7)
     const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('all', 'GET', null,params);
   return data
 }
 
 
-export const getUserProductItem = async (id:string) => {
-    const data = await productAPI < { data: productI }>('get/'+id, 'GET', null);
+export const getUserProductItem = async (id: string) => {
+    console.log(6)
+    const data = await productAPI < productI>('getOne/'+id, 'GET', null);
   return data
 }

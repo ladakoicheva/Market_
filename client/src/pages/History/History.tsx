@@ -13,7 +13,7 @@ function History() {
     getNext,
   } = useProducts({  getProductsAll:getHistory });
 
-console.log(products)
+
 
 
   

@@ -129,7 +129,7 @@ export const getCategoriesData = createAsyncThunk<
   'products/getCategories',
   async (_, { dispatch, rejectWithValue }) => {
     const res = await getCategories();
-    console.log(res)
+    
     
     if (!res.ok) {
       return rejectWithValue({ ok: false, e: res.e });

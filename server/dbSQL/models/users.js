@@ -1,15 +1,8 @@
 import { getSuccessReq, getErrorReq } from "../../utils/responseHelpers.js"
-import { DB } from "../config.js";
+import { DB } from "../index.js";
 
 
-// await DB.query(`
-//       CREATE TABLE IF NOT EXISTS users (
-//       email VARCHAR(255) NOT NULL UNIQUE,
-//       password VARCHAR(255) NOT NULL,
-//       id INT AUTO_INCREMENT PRIMARY KEY,
-//       role ENUM('user', 'admin', 'client', 'sale')
-//       )
-//     `)
+
 
 export const getUserDB = async (email) => {
   try {
@@ -17,8 +10,6 @@ export const getUserDB = async (email) => {
       `SELECT * FROM users WHERE email = ? LIMIT 1`,
       [email]
     );
-
-    console.log(user)
 
     return getSuccessReq(user)
 
@@ -29,7 +20,6 @@ export const getUserDB = async (email) => {
 }
 
 
-// loginUserDB('hgfdsfghj@gmail.com')
 
 
 

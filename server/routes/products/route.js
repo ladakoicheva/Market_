@@ -15,12 +15,9 @@ export const productRouter = Router();
 productRouter.post('/add', authorize, addProduct);
 productRouter.get('/get', authorize, getUserProducts);
 productRouter.patch('/edit', authorize, editProduct)
-
+productRouter.get('/getOne/:id', getUserProductItem)
 
 productRouter.get('/categories', getCategories)
-
-
-
 productRouter.get('/category', getProductsByCategory);
 productRouter.get('/search', getProductsByCategoryForSearch);
 productRouter.get('/all', getAllProducts);

@@ -79,7 +79,7 @@ export const loginUser = createAsyncThunk<
   
     
     dispatch(changeUserData(res.data));
-    console.log(res.data.token)
+   
     localStorage.setItem('token', res.data.token);
     return {ok:true}
   }
@@ -98,7 +98,7 @@ export const logoutUser = createAsyncThunk<
     if (!res.ok) return { ok: false, e: res.e };
 
     dispatch(changeUserData(null));
-    console.log(res.data.token)
+   
     localStorage.removeItem('token');
     return { ok: true };
   }

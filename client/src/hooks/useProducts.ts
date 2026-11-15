@@ -33,6 +33,7 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
   isNext:true,
   });
 
+ 
     const [data, setData] = useState<{
       productsData: Record<string, any>[], index: number,
       currentPage: number, isNext: boolean
@@ -48,8 +49,11 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
   const isMore = isSearch ? searchData.isNext : data.isNext;
   
     const handleSearch = async (v : string) => {
-   
-  
+      if (v.trim() === '') {
+        
+        setIsSearch(false);
+        return
+      };
       const query = { limit, next: 0, search: v, category }
       //@ts-ignore
       const res = await  getProductsSearch(query)
@@ -68,7 +72,7 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
      
     const query = { limit, next: searchData.index, search, category }
    //@ts-ignore
-      const res = await getProductsSearch(query) ;
+    const res = await getProductsSearch(query);
       
       if (res.ok) {
         setSearchData((prev)=>({...prev,...res.data, productsData:[...prev.productsData,...res.data.products]}))
@@ -81,13 +85,13 @@ export const useProducts = ({ getProductsAll, getProductsSearch, category ,searc
    if(category) params.category = category
   
    const res = await getProductsAll(params);
-  console.log(res)
+ 
   if (res.ok) {
     const d = res.data as Record<string,any>;
 
-    console.log(d,'d')
+
     setData(data => ({...data,...d, productsData : [...data.productsData, ...d.products], currentPage : data.currentPage + 1}))
-    console.log(res)
+ 
   }
 };
     useEffect(() => {

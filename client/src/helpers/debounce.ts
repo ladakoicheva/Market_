@@ -16,8 +16,3 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-// function saveInput(){
-//   console.log('Saving data');
-// }
-// const processChange = debounce(saveInput, 500);
-

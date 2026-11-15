@@ -1,48 +1,24 @@
-import { v4 as uuidv4 } from 'uuid';
-import { setFileDirJSON } from '../../utils/fs.js';
-import { getAllFiles } from '../../utils/fs.js';
-import { addProductCategories } from '../search/controller.js';
 import { setFileJSON } from "../../utils/fs.js";
-import { editProductCategory } from "../search/controller.js";
 import { getErrorReq, getSuccessReq } from "../../utils/responseHelpers.js";
 import { getFile } from "../../utils/fs.js";
+import { createProductDB } from '../../dbSQL/models/products.js';
+import { getUserProductsDB } from '../../dbSQL/models/products.js';
+import { getProductItemDB } from "../../dbSQL/models/products.js";
+
 
 export const addProduct = async (req, res) => {
-  //  {
-  //  "name": "",
-  //  "category": "ELECTRONICS",
-  //  "price": 200,
-  //  "id": "",
-  //   "owner": "email saler",
-  //  "inStock": true,
-  //
-  // }
 
-  const id = uuidv4();
   const productData = req.body;
-  const { email } = req.user;
-
-  // getAllFiles('datas', 'users', email, 'products');
-
-  const result = await setFileDirJSON({ ...productData, id }, id + '.json', 'datas', 'users', email, 'products');
+  const { email  } = req.user;
+  const result = await createProductDB({ ...productData, owner: email});
   if (!result.ok) return res.status(500).json({ ok: false, e: result.e });
-  console.log(id, email, productData.category);
-  await addProductCategories(id, email,productData.category);
-  return res.status(200).json({ ok: true, data: { ...result.data, owner: email ,id} });
+  return res.status(200).json({ ok: true, data: result.data });
 };
 
 export const getUserProducts = async (req, res) => {
-  //  {
-  //  "name": "",
-  //  "category": "ELECTRONICS",
-  //  "price": 200,
-  //  "id": "",
-  //   "owner": "email saler",
-  //  "inStock": true,
-  //
-  // }
+ 
   const { email } = req.user;
-  const result = await getAllFiles('datas', 'users', email, 'products');
+  const result = await getUserProductsDB(email);
   if (!result.ok) return res.status(500).json({ ok: false, e: result.e });
   return res.status(200).json({ ok: true, data: result.data});
   
@@ -51,7 +27,7 @@ export const getUserProducts = async (req, res) => {
 export const getUserProductItem = async (req, res) => {
 
   const id = req.params.id;
-  const product = await getFile('datas', 'users', email, 'products', id + '.json');
+  const product = await getProductItemDB(id);
   if (!product.ok) return res.status(500).json({ ok: false, e: product.e });
   return res.status(200).json({ ok: true, data: product.data });
 }
@@ -76,7 +52,6 @@ export const editProduct = async (req, res) => {
     return res.status(500).json(getErrorReq(error));
   }
 
-  // if (!result.ok) return res.status(500).json(getErrorReq('failed to rewrite data'));
 
 
 }

@@ -1,7 +1,7 @@
 export enum CategoriesE  {
-  ELECTRONICS = "ELECTRONICS",
-  CLOUTHING = ' CLOUTHING',
-  FOOD ="FOOD",
+  ELECTRONICS = "electronics",
+  CLOUTHING = 'clouthing',
+  FOOD ="food",
 
 }
 
@@ -23,5 +23,5 @@ export interface productI {
 export interface stateI {
   editProduct:{isEdit:boolean,product:productI}
   products: productI[];
-   categories:category[]
+  categories:category[]
 }

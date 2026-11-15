@@ -21,17 +21,11 @@ export default function AllProductPage() {
 const searchValue = searchParams.get('search')||"";
 
   useEffect(() => {
-      
-      const handleSearch = async () => {
-    // const v = e.target.value;
-   
+ 
     
-    // setSearch(v);
+    
     getProductsBySearchDB(searchValue)
-
   
-      };
-    handleSearch()
   },[searchValue])
   
   const { 

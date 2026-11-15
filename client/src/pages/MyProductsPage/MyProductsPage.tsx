@@ -21,7 +21,7 @@ type props={
   if (isLoadingApp) return <Loader />
   
 if(products.length <= 0) return  <h1>No products</h1>
- console.log(products)
+ 
   return (
     <>  <div className={style.grid_template_columns}>
       {cards  }

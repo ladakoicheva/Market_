@@ -14,7 +14,7 @@ export default function HistoryItemPage() {
   const products = item[1];
   const timestamp = item[2];
   const isItem = item.length > 0;
-  console.log(item)
+
 
 
 

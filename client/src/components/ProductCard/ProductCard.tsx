@@ -3,9 +3,10 @@ import style from './ProductCard.module.css';
 import { updateEditProduct } from "../../features/product/productSlice";
 import { addToHistory } from "../../api/history";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Button from "../Button/Button";
 import EditIcon from "../../icons/EditIcon";
+
 
 type Props = {
   product: productI,
@@ -48,7 +49,7 @@ export default function ProductCard({ product, openModal }: Props) {
       </div>
 
       <div className={style.productInfo}>
-        <h2 className={style.productName}>{product.name}</h2>
+        <Link to={`/productItem/${product.id}`}><h2 className={style.productName}>{product.name}</h2></Link>
         <p className={style.productPrice}>
           {product.price}<span className={style.productCurrency}>$</span>
         </p>
