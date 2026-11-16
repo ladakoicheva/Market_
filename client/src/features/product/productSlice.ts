@@ -3,11 +3,12 @@ import type { stateI } from "./types";
 import { addProduct } from "../../api/products";
 import type { AppDispatch } from "../../redux/store";
 import type { productI } from "./types";
-import { getUserProducts } from "../../api/products";
+import { getUserProducts } from "../../api/users";
 import { getCategories } from "../../api/products";
 import { editProduct } from "../../api/products";
 import type { category } from "./types";
 import type { RootState } from "../../redux/store";
+import type { productFormValues } from "../../components/ProductForm/types";
 
 const initialState:stateI = {
   editProduct: {
@@ -39,7 +40,7 @@ const productSlice = createSlice({
     updateProductNoUser: (state) => {
       state.products = []
     },
-    updateCategories: (state, action) => {
+    updateCategories: (state, action: PayloadAction<category[]>) => {
       state.categories = action.payload
     },
     updateEditProduct: (state, action:PayloadAction<productI>) => {
@@ -66,7 +67,7 @@ const productSlice = createSlice({
 })
 
 export const getUserProductData = createAsyncThunk
-  <{ ok: Boolean },
+  <{ ok: boolean; e?: string },
     void,
   { dispatch: AppDispatch }
 >(
@@ -84,7 +85,7 @@ export const getUserProductData = createAsyncThunk
 
 export const addProductData = createAsyncThunk<
   { ok: boolean, data: productI }, 
-  Omit<productI, "owner" | "id">,
+  productFormValues,
   { dispatch: AppDispatch }
 >(
   'products/add',
@@ -117,14 +118,14 @@ export const editProductData = createAsyncThunk<
     }
     
     dispatch(updateProductInList(newProduct));
-    return { ok: true, data: res.data as productI };
+    return { ok: true, data: res.data };
   }
 );
 
 export const getCategoriesData = createAsyncThunk<
   { ok: boolean, data: category[] }, 
   void,
-  { dispatch: AppDispatch,rejectValue:  { ok: boolean, e:any}}
+  { dispatch: AppDispatch,rejectValue:  { ok: boolean; e?: string }}
 >(
   'products/getCategories',
   async (_, { dispatch, rejectWithValue }) => {
@@ -135,8 +136,8 @@ export const getCategoriesData = createAsyncThunk<
       return rejectWithValue({ ok: false, e: res.e });
     }
     
-    dispatch(updateCategories(res.data as category[]));
-    return { ok: true, data: res.data as category[]};
+    dispatch(updateCategories(res.data));
+    return { ok: true, data: res.data};
   }
 );
 

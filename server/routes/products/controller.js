@@ -1,68 +1,85 @@
 import { setFileJSON } from "../../utils/fs.js";
 import { getErrorReq, getSuccessReq } from "../../utils/responseHelpers.js";
 import { getFile } from "../../utils/fs.js";
-import { createProductDB } from '../../dbSQL/models/products.js';
-import { getUserProductsDB } from '../../dbSQL/models/products.js';
-import { getProductItemDB } from "../../dbSQL/models/products.js";
+import {
+  createProductDB,
+  getAllProductsDB,
+  getProductItemDB,
+  getProductsByCategoryDB,
+  getUserProductsDB,
+} from "../../dbSQL/models/products.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
+import { getIscheckIsNext } from "../../utils/pagination.js";
+import { editProductCategory } from "../search/controller.js";
 
 
-export const addProduct = async (req, res) => {
+
+
+export const addProduct = asyncHandler(async (req, res) => {
 
   const productData = req.body;
-  const { email  } = req.user;
-  const result = await createProductDB({ ...productData, owner: email});
-  if (!result.ok) return res.status(500).json({ ok: false, e: result.e });
-  return res.status(200).json({ ok: true, data: result.data });
-};
+  const { email } = req.user;
+  const result = await createProductDB({ ...productData, owner: email });
+  return res.status(201).json(getSuccessReq(result));
+});
 
-export const getUserProducts = async (req, res) => {
- 
+export const getUserProducts = asyncHandler(async (req, res) => {
+
   const { email } = req.user;
   const result = await getUserProductsDB(email);
-  if (!result.ok) return res.status(500).json({ ok: false, e: result.e });
-  return res.status(200).json({ ok: true, data: result.data});
-  
-}
+  return res.status(200).json(getSuccessReq(result));
 
-export const getUserProductItem = async (req, res) => {
+});
+
+export const getUserProductItem = asyncHandler(async (req, res) => {
 
   const id = req.params.id;
-  const product = await getProductItemDB(id);
-  if (!product.ok) return res.status(500).json({ ok: false, e: product.e });
-  return res.status(200).json({ ok: true, data: product.data });
-}
+  const result = await getProductItemDB(id);
+  return res.status(200).json(getSuccessReq(result));
+});
 
+export const getAllProducts = asyncHandler(async (req, res) => {
+  const page = +req.query.page;
+  const limit = +req.query.limit;
+  const result = await getAllProductsDB(limit, page);
+  const isNext = getIscheckIsNext(result, limit);
 
-export const editProduct = async (req, res) => {
+  return res.status(200).json(getSuccessReq({ products: result, index: 0, isNext }));
+});
+
+export const getProductsByCategory = asyncHandler(async (req, res) => {
+  const page = +req.query.page;
+  const limit = +req.query.limit;
+  const category = req.query.category;
+  const result = await getProductsByCategoryDB(limit, page, category);
+  const isNext = getIscheckIsNext(result, limit);
+
+  return res.status(200).json(getSuccessReq({ products: result, index: 0, isNext }));
+});
+
+export const editProduct = asyncHandler(async (req, res) => {
   const { email } = req.user;
   const newProduct = req.body;
 
   const oldCategory = newProduct.oldCategory;
   delete newProduct.oldCategory
 
-  try {
+  
     await Promise.all([
       setFileJSON(newProduct, 'datas', 'users', email, 'products', newProduct.id + '.json'),
       editProductCategory(oldCategory, newProduct.category, newProduct.id)
     ]);
-    return res.status(200).json(getSuccessReq({ok : true}))
-  } catch (error) {
-    console.log(error);
-    
-    return res.status(500).json(getErrorReq(error));
-  }
+    return res.status(200).json(getSuccessReq({ ok: true }))
+  
+   
+  });
 
 
 
-}
 
 
-export const getCategories = async (req, res) => {
+export const getCategories = asyncHandler(async (req, res) => {
   const categories = await getFile('datas', 'categories', 'categories.json');
   if (categories.ok) return res.status(200).json(categories);
   return res.status(500).json(getErrorReq(null));
-}
-
-
-
-
+});

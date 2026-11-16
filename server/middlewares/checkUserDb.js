@@ -1,24 +1,16 @@
-import { getErrorReq } from "../utils/responseHelpers.js";
 import { getUserDB } from "../dbSQL/models/users.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { createError } from "../utils/createError.js";
 
 
-export const checkCredentials = async (req, res, next) => {
+export const checkCredentials = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log(req.body)
-
-  const userRes = await getUserDB(email);
-
-  if (!userRes.ok) {
-    return res.status(400).json(getErrorReq('email does not exist'));
-  }
-
-  const user = userRes.data;
-
-
+  const user = await getUserDB(email);
+  if (!user) throw createError(400, 'email does not exist');
 
   if (user.PASSWORD !== password) {
-    return res.status(400).json(getErrorReq('wrong password'));
+    throw createError(400, 'wrong password');
   }
 
   delete user.PASSWORD;
@@ -26,4 +18,4 @@ export const checkCredentials = async (req, res, next) => {
 
   next()
 
-}
+});

@@ -4,27 +4,24 @@ import Button from "../Button/Button";
 import schema from "./schema";
 import { useAppDispatch } from "../../redux/hooks";
 import { register } from "../../features/user/userSlice";
+import type { SignUpValuesI } from "./types";
 
 type Props = {
   closeModal: () => void;
 };
 
-type FormValues = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+
 
 export default function SignUpForm({ closeModal }: Props) {
   const dispatch = useAppDispatch();
 
-  const initialValues: FormValues = {
+  const initialValues: SignUpValuesI = {
     email: '',
     password: '',
     confirmPassword: '',
   };
 
-  const registerUser = async (values: FormValues, { resetForm }: { resetForm: () => void }) => {
+  const registerUser = async (values: SignUpValuesI, { resetForm }: { resetForm: () => void }) => {
     try {
       const res = await dispatch(register(values)).unwrap();
 

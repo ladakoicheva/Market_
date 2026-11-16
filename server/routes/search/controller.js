@@ -1,125 +1,67 @@
-import { getErrorReq, getSuccessReq } from "../../utils/responseHelpers.js";
-import { searchProductsInCategDB } from "../../dbSQL/models/search.js";
-import { getProductsByCategoryDB } from "../../dbSQL/models/products.js";
-import { getAllProductsDB } from "../../dbSQL/models/products.js";
-import { searchProductsDB } from "../../dbSQL/models/search.js";
+import { getSuccessReq } from "../../utils/responseHelpers.js";
+import { getFile, setFileJSON } from "../../utils/fs.js";
+import { searchProductsDB, searchProductsInCategDB } from "../../dbSQL/models/search.js";
+import { asyncHandler } from "../../utils/asyncHandler.js";
 
+export const editProductCategory = async (oldCategory, newCategory, id) => {
+  if (oldCategory === newCategory) return { ok: true };
 
+  const [oldFileRes, newFileRes] = await Promise.all([
+    getFile("datas", "products", `${oldCategory}.json`),
+    getFile("datas", "products", `${newCategory}.json`),
+  ]);
 
+  if (!oldFileRes.ok) return oldFileRes;
+  if (!newFileRes.ok) return newFileRes;
 
+  const oldCategoryProducts = oldFileRes.data;
+  const newCategoryProducts = newFileRes.data;
+  const productIndex = oldCategoryProducts.findIndex(
+    (product) => String(product.id) === String(id),
+  );
 
-const getIscheckIsNext = (d, limit) => {
-  return d.data.length > limit;
-}
-
-
-
-export const getAllProducts = async (req, res) => {
-
-  const page = +req.query.page;
-  const limit = +req.query.limit; //10
-
-  try {
-    const reponse = await getAllProductsDB(limit, page);
-    const isNext = getIscheckIsNext(reponse, limit);
-
-    return res.status(200).json(getSuccessReq({ products: reponse.data, index: 0, isNext }));
-
-  } catch (error) {
-    return res.status(500).json(getErrorReq(error));
+  if (productIndex === -1) {
+    return { ok: false, e: new Error(`Product ${id} not found in ${oldCategory}`) };
   }
 
+  const [product] = oldCategoryProducts.splice(productIndex, 1);
+  newCategoryProducts.push(product);
 
-  // WHERE category = ?
-}
-//!
+  const results = await Promise.all([
+    setFileJSON(oldCategoryProducts, "datas", "products", `${oldCategory}.json`),
+    setFileJSON(newCategoryProducts, "datas", "products", `${newCategory}.json`),
+  ]);
 
+  const failedResult = results.find((result) => !result.ok);
+  return failedResult ?? { ok: true };
+};
 
-// {limit : 10, page : 1}
-
-
-export const getProductsByCategory = async (req, res) => {
-  const page = +req.query.page;
-  const limit = +req.query.limit; //10
-  const category = req.query.category;
-
-
-
-  console.log(category, limit)
-
-
-  try {
-    const reponse = await getProductsByCategoryDB(limit, page, category)
-    const isNext = getIscheckIsNext(reponse, limit);
-    return res.status(200).json(getSuccessReq({ products: reponse.data, index: 0, isNext }));
-
-  } catch (error) {
-    return res.status(500).json(getErrorReq(error));
-  }
-
-
-
-
-}
-
-
-
-
-
-
-export const getProductsByCategoryForSearch = async (req, res) => {
+export const getProductsByCategoryForSearch = asyncHandler(async (req, res) => {
 
   const limit = +req.query.limit; //10
   let cursor = +req.query.next || 0;
   const word = req.query.search;
   const category = req.query.category;
 
+  const result = await searchProductsInCategDB({ limit, word, cursor, category });
+  const matchLength = result.length;
+  cursor = matchLength === limit ? result[matchLength - 1].id : 0;
 
-  try {
-    const productsMatch = await searchProductsInCategDB({ limit, word, cursor, category });
+  return res.status(200).json(getSuccessReq({ index: cursor, products: result, isNext: !!cursor }));
 
-    if (!productsMatch.ok) throw new Error(productsMatch.e)
-    const items = productsMatch.data;
-    const matchLength = items.length;
-    cursor = matchLength === limit ? items[matchLength - 1].id : 0;
+})
 
-
-
-    return res.status(200).json(getSuccessReq({ index: cursor, products: items, isNext: !!cursor }));
-
-  } catch (error) {
-    return res.status(500).json(getErrorReq(error));
-  }
-
-
-
-
-}
-
-export const getAllProductsForSearch = async (req, res) => {
+export const getAllProductsForSearch = asyncHandler(async (req, res) => {
 
   const limit = +req.query.limit; //10
   let cursor = +req.query.next || 0;
   const word = req.query.search;
 
-  try {
-    const productsMatch = await searchProductsDB({ limit, word, cursor });
+  const result = await searchProductsDB({ limit, word, cursor });
+  const matchLength = result.length;
+  cursor = matchLength === limit ? result[matchLength - 1].id : 0;
 
-    if (!productsMatch.ok) throw new Error(productsMatch.e)
-    const items = productsMatch.data;
-    const matchLength = items.length;
-    cursor = matchLength === limit ? items[matchLength - 1].id : 0;
-
-    return res.status(200).json(getSuccessReq({ index: cursor, products: items, isNext: !!cursor }));
-
-  } catch (error) {
-
-    return res.status(500).json(getErrorReq(error));
-  }
+  return res.status(200).json(getSuccessReq({ index: cursor, products: result, isNext: !!cursor }));
 
 
-
-
-}
-
-
+})

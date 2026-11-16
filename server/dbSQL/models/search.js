@@ -1,11 +1,10 @@
-import { getSuccessReq, getErrorReq } from "../../utils/responseHelpers.js";
 import { DB } from "../index.js";
 
 
 
 
-const getSQLReqData = async ({ limit, word, cursor, category }) => {
-  const [products] = category
+const getSQLReqData = async ({ limit, word, cursor, category=null }) => {
+  const [result] = category
     ? await DB.query(
       `SELECT * FROM products
          WHERE name LIKE ? AND id > ? AND category = ?
@@ -21,23 +20,16 @@ const getSQLReqData = async ({ limit, word, cursor, category }) => {
       [`%${word}%`, cursor, limit]
     );
 
-  return products;
+  return result;
 };
 
 
 
 export const searchProductsDB = async ({ limit, word, cursor }) => { // 10 1
 
-  try {
+  const result = await getSQLReqData({ limit, word, cursor })
+  return result
 
-
-    const products = await getSQLReqData({ limit, word, cursor })
-
-    console.log(products)
-    return getSuccessReq(products)
-  } catch (error) {
-    return getErrorReq(error)
-  }
 
 
 
@@ -45,15 +37,9 @@ export const searchProductsDB = async ({ limit, word, cursor }) => { // 10 1
 
 
 export const searchProductsInCategDB = async ({ limit, word, cursor, category }) => {
-  try {
+
+  const result = await getSQLReqData({ limit, word, cursor, category })
+  return result
 
 
-    const products = await getSQLReqData({ limit, word, cursor, category })
-    console.log(products)
-
-    return getSuccessReq(products)
-  } catch (error) {
-    return getErrorReq(error)
-
-  }
 }

@@ -28,7 +28,7 @@ export const getFile = async (...url) => {
     const length = url.length - 1;
     const filename = url[length]
     const data = await fs.readFile(link, 'utf8');
-    if (filename.includes('.json')) return  getSuccessReq(JSON.parse(data))
+    if (filename.includes('.json')) return  getSuccessReq( JSON.parse(data))
     return getSuccessReq(data)
   } catch (error) {
     return getErrorReq(error)

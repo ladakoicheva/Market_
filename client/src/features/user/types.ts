@@ -2,7 +2,7 @@ export interface userI {
   email: string,
   id: string,
   role: string,
-  token:string,
+
 };
 
 export enum ModeType {
@@ -13,7 +13,7 @@ export enum ModeType {
 export interface stateI{
   user: null | userI,
   mode: ModeType;
-  isLoadingApp: Boolean;
+  isLoadingApp: boolean;
 }
 
  

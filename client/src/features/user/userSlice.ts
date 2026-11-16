@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { ModeType } from "./types";
 import { registerUser } from "../../api/users";
 import { login } from "../../api/users";
@@ -8,6 +8,9 @@ import type { stateI } from "./types";
 import type { AppDispatch } from "../../redux/store";
 import { updateProductNoUser } from "../product/productSlice";
 import { getUserProductData } from "../product/productSlice";
+import type { userI } from "./types";
+import type { SignInValues } from "../../components/SignInForm/types";
+import type { SignUpValuesI } from "../../components/SignUpForm/types";
 
 
 
@@ -26,11 +29,11 @@ const userSlice = createSlice({
       state.mode = ModeType.SIGN_UP;
     },
     changeModeSignIn: (state) => {
-       state.mode = ModeType.SIGN_IN;
+      state.mode = ModeType.SIGN_IN;
     },
   
-    changeUserData: (state, action) => {
-      const data =action.payload
+    changeUserData: (state, action: PayloadAction<userI | null >) => {
+      const data = action.payload;
       state.user = data;
 
       console.log('данные пользователя получили')
@@ -48,8 +51,8 @@ const userSlice = createSlice({
 
 
 export const register = createAsyncThunk<
-  { ok: Boolean } ,//возвращаемое значение
-  { confirmPassword: string, password: string, email: string },//первый аргумент 
+  { ok: boolean; e?: string } ,//возвращаемое значение
+  SignUpValuesI,//первый аргумент
   {dispatch:AppDispatch}//thunk config : dispatch,getState и тд
   >(
   'users/register',
@@ -58,8 +61,7 @@ export const register = createAsyncThunk<
     
     if (!res.ok) return { ok: false, e: res.e };
 
-    const data = { email: res.data.email, id: res.data.id ,role:res.data.role}
-    dispatch(changeUserData(data));
+    dispatch(changeUserData(res.data.user ));
     localStorage.setItem('token', res.data.token);
   
      return {ok:true}
@@ -67,9 +69,9 @@ export const register = createAsyncThunk<
 );
 
 export const loginUser = createAsyncThunk<
-  { ok: Boolean },
-  {password: string, email: string },
-  {dispatch:AppDispatch,rejectValue:String}
+  { ok: boolean },
+  SignInValues,
+  {dispatch:AppDispatch,rejectValue:string}
   >(
   'users/login',
   async (formData, { dispatch ,rejectWithValue}) => {
@@ -78,7 +80,7 @@ export const loginUser = createAsyncThunk<
     if (!res.ok) return rejectWithValue(res.e !)
   
     
-    dispatch(changeUserData(res.data));
+    dispatch(changeUserData(res.data.user ));
    
     localStorage.setItem('token', res.data.token);
     return {ok:true}
@@ -87,7 +89,7 @@ export const loginUser = createAsyncThunk<
 );
 
 export const logoutUser = createAsyncThunk<
-  { ok: Boolean },
+  { ok: boolean; e?: string },
   void,
   {dispatch:AppDispatch}
   >(
@@ -126,7 +128,7 @@ export const authorizeUser = createAsyncThunk<
         });
       }
       dispatch(getUserProductData());
-      dispatch(changeUserData(res.data));
+      dispatch(changeUserData(res.data.user));
     
       return { ok: true };
     } catch (error) {

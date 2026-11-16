@@ -4,7 +4,7 @@ import { DB } from "../index.js";
 
 
 export const createProductDB = async (product) => {
-  try {
+
     const [{ insertId }] = await DB.execute(
       `INSERT INTO products(name, category, price, inStock, owner)
      VALUES (?, ?, ?, ?, ?)
@@ -12,20 +12,18 @@ export const createProductDB = async (product) => {
       [product.name, product.category, product.price, product.inStock, product.owner]
     )
 
-    return getSuccessReq({ ...product, id: insertId })
+    return { ...product, id: insertId }
 
-  } catch (error) {
-    return getErrorReq(error)
-  }
-
+ 
 
 
 
 }
 
 export const getUserProductsDB = async (email) => {
-  try {
-    const [res] = await DB.execute(`
+
+  
+    const [result] = await DB.execute(`
       SELECT *
       FROM products 
       WHERE owner = ?
@@ -33,27 +31,22 @@ export const getUserProductsDB = async (email) => {
       `, [email]);
 
 
-    return getSuccessReq(res);
-  } catch (error) {
-    return getErrorReq(error);
-  }
+    return result;
+
 }
 
 
 export const getAllProductsDB = async (limit, page) => { // 10 1
 
-  try {
      const skip = (page - 1) * limit
 
-    const [products] = await DB.query(
+    const [result] = await DB.query(
     'SELECT * FROM products LIMIT ? OFFSET ?', // ORDER BY price 
      [limit, skip]
     )
    // console.log(products)
-    return getSuccessReq(products)
-  } catch (error) {
-    return getErrorReq(error)
-  }
+    return result
+
 
 
 
@@ -62,23 +55,20 @@ export const getAllProductsDB = async (limit, page) => { // 10 1
 // 'SELECT * FROM products LIMIT ? OFFSET ?', // ORDER BY price 
 
 export const getProductItemDB = async (id) => {
-  try {
+  
 
-    const [[product]] = await DB.query(
+    const [[result]] = await DB.query(
       'SELECT * FROM products WHERE id = ? ',
       [id]
     )
-    return getSuccessReq(product)
-  } catch (error) {
-    return getErrorReq(error)
-  }
+    return result
+ 
  
 }
 
 
 export const getProductsByCategoryDB = async (limit, page , category) => { // 10 1
 
-  try {
     const skip = (page - 1) * limit
 
     const [products] = await DB.query(
@@ -86,11 +76,8 @@ export const getProductsByCategoryDB = async (limit, page , category) => { // 10
       [category, limit, skip]
     )
 
-    return getSuccessReq(products)
-  } catch (error) {
-    return getErrorReq(error
-    )
-  }
+    return products
+
 
 
 

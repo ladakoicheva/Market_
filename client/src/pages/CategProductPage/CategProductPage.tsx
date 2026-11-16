@@ -1,7 +1,7 @@
 import {  useMemo,  } from 'react'
 import style from './CategProductPage.module.css'
-import { getProductsByCategories } from '../../api/products';
-import { getProductsByCategSearch } from '../../api/products';
+import { getProductsByCategory } from '../../api/products';
+import { getProductsByCategoryForSearch } from '../../api/search';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import ShowMoreButton from '../../components/ShowMoreButton/ShowMoreButton';
 import { useEffect } from 'react';
@@ -34,9 +34,9 @@ const searchValue = searchParams.get('search')||"";
     getProductsBySearchDB,
     isMore,
     
-  } = useProducts({
-    getProductsAll: getProductsByCategories,
-    getProductsSearch: getProductsByCategSearch,
+  } = useProducts< productI>({
+    getProductsAll: getProductsByCategory,
+    getProductsSearch: getProductsByCategoryForSearch,
     category: categ?categ:null,
     search:searchValue!,
 
@@ -57,7 +57,7 @@ const searchValue = searchParams.get('search')||"";
 
 
   const cards = useMemo(() => {
-    const products = productsData as productI[];
+    const products = productsData ;
       return  products.map((p,index) => <ProductCard product={p} key={index}  />)
     }, [productsData])
   

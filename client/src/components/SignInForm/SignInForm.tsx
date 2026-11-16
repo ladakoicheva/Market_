@@ -5,25 +5,23 @@ import schema from "./schema";
 import { loginUser } from "../../features/user/userSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useState } from "react";
+import type { SignInValues } from "./types";
 
 type Props = {
   closeModal: () => void;
 };
 
-type FormValues = {
-  email: string;
-  password: string;
-};
+
 
 export default function SignInForm({ closeModal }: Props) {
   const [backError, setBackError] = useState('');
   const dispatch = useAppDispatch();
-  const initialValues: FormValues = {
+  const initialValues: SignInValues = {
     email: '',
     password: '',
   };
 
-  const logIn = async (formData: FormValues, { resetForm }: { resetForm: () => void }) => {
+  const logIn = async (formData: SignInValues, { resetForm }: { resetForm: () => void }) => {
     try {
       setBackError('');
       const res = await dispatch(loginUser(formData)).unwrap();

@@ -6,7 +6,7 @@ import ProductCard from "../../components/ProductCard/ProductCard";
 import ShowMoreButton from "../../components/ShowMoreButton/ShowMoreButton";
 import style from '../AllProductPage/AllProductPage.module.css'
 import { getAllProducts } from "../../api/products";
-import { getProductsSearch } from "../../api/products";
+import { getAllProductsForSearch } from "../../api/search";
 import type { productI } from "../../features/product/types";
 import FilterIcon from "../../icons/FilterIcon";
 import FilterModal from "../../components/FilterModal/FilterModal";
@@ -35,9 +35,9 @@ const searchValue = searchParams.get('search')||"";
     isMore,
   
    
-  } = useProducts({
+  } = useProducts<productI>({
     getProductsAll: getAllProducts,
-    getProductsSearch: getProductsSearch,
+    getProductsSearch: getAllProductsForSearch,
     // search,
     search:searchValue!,
     category:null,
@@ -52,7 +52,7 @@ const searchValue = searchParams.get('search')||"";
     // const {  productsData } = products;
 
   const cards = useMemo(() => {
-       const products = productsData as productI[];
+       const products = productsData ;
       return products.map((p,index) => <ProductCard product={p} key={index}  />)
     }, [productsData])
 

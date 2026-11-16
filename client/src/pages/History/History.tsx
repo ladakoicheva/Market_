@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { AuthHock } from '../../hocks/AuthHock';
 import { useProducts } from '../../hooks/useProducts';
 import { Link } from 'react-router';
+import type { historyI } from '../../features/history/types';
 
 
 function History() {
@@ -11,7 +12,7 @@ function History() {
     products,
     isMore,
     getNext,
-  } = useProducts({  getProductsAll:getHistory });
+  } = useProducts<historyI>({  getProductsAll:getHistory });
 
 
 
@@ -20,7 +21,7 @@ function History() {
 
   const list = useMemo(() => {
     
-    return products.productsData.map((el:any) => el.products.map((p:any) => <li key={el.date}><Link to = {'/history/'+el.date}>{p.name}</Link></li>))
+    return products.productsData.map((el) => el.products.map((p) => <li key={el.date}><Link to = {'/history/'+el.date}>{p!.name}</Link></li>))
   }, [products])
 
   return (<>

@@ -1,60 +1,29 @@
 import type { userI } from "../features/user/types";
+import type { productI } from "../features/product/types";
+import { apiRequest } from "./apiRequest";
+import type { SignInValues } from "../components/SignInForm/types";
+import type { SignUpValuesI } from "../components/SignUpForm/types";
+
+
 const reqLink = import.meta.env.VITE_USER_API_URL
 
-type typeReq = 'POST' | 'GET' | 'DELETE' | 'PATCH';
-type typeResponseGood<A> = { ok: true, data : A };
-type typeResponseBad = { ok: false ,e?:string};
-type headers = {
-  'Content-Type': string,
-  'Authorization'?:string
-}
-type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
-
-
-const usersAPI = async < Response, T = undefined > (url: string| null, type :  typeReq = 'GET', body ? : null | T) : Promise<typeResponseAPI<Response>> => {
-  try {
-    const token = localStorage.getItem('token');
-    const headers:headers = {
-      'Content-Type': 'application/json',
-    };
-    if (token) headers['Authorization']= ` ${token}`
-    
-    const response = await fetch(url ? `${reqLink}/${url}` : reqLink, {
-      method: type,
-      headers,
-      body: body ? JSON.stringify(body) : null,
-    });
-  
 
   
-    
-    const res = await response.json();
-     if (!res.ok) return {ok : false, e:  res.e}
 
-    return {ok : true, data:res.data}
-  } catch (e) {
-    const error = e instanceof Error ? e.message : (e as string);
-    return {ok : false,e:error}
-    }
-} 
-  
-
-export const registerUser = async(formData: { confirmPassword: string, password: string, email: string }) => {
-  const data = await usersAPI < userI,{ confirmPassword: string, password: string, email: string }>('register', 'POST', formData);
+export const registerUser = async(formData: SignUpValuesI) => {
+  const data = await apiRequest<{ token: string, user: userI }, SignUpValuesI>({ url: 'register', method: 'POST', body: formData, baseUrl: reqLink });
   return data
 }
 
 
-export const login = async (formData: { password: string, email: string }) => {
-
-  const data = await usersAPI<userI, { password: string, email: string}>('login', 'POST', formData);
-
+export const login = async (formData: SignInValues) => {
+  const data = await apiRequest<{ token: string, user: userI }, SignInValues>({ url: 'login', method: 'POST', body: formData, baseUrl: reqLink });
   return data
 }
 
 export const logout  =  async () => {
   
-  const data = await usersAPI<userI>('logout', 'GET');
+  const data = await apiRequest<null>({ url: 'logout', method: 'GET' ,baseUrl:reqLink});
 
   return data
 }
@@ -62,7 +31,12 @@ export const logout  =  async () => {
 
 export const authorize =  async () => {
   
-  const data = await usersAPI<userI>('authorization', 'GET');
+  const data = await apiRequest<{ token: string, user: userI }>({ url: 'me', method: 'GET', baseUrl: reqLink });
 
   return data
+}
+
+export const getUserProducts = async () => {
+  const data = await apiRequest<productI[]>({ url: 'me/products', method: 'GET', baseUrl: reqLink });
+  return data;
 }

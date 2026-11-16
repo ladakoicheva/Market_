@@ -3,19 +3,13 @@ import style from './ProductForm.module.css'
 import Button from "../Button/Button";
 import { useState } from "react";
 import Switches from "../Switch";
-import { CategoriesE } from "../../features/product/types";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addProductData } from "../../features/product/productSlice";
 import { editProductData } from "../../features/product/productSlice";
-
+import type { productFormValues } from "./types";
 import { useNavigate } from "react-router";
 
-interface FormValues  {
-  name: string,
-  category:  CategoriesE| undefined,
-  price: number,
-  inStock:boolean,
-};
+
 
 type props = {
   closeForm?:()=>void
@@ -29,7 +23,7 @@ export default function ProductForm({closeForm}:props) {
 
 
  
-  const initialValues: FormValues= editProduct.isEdit ?
+  const initialValues: productFormValues= editProduct.isEdit ?
     {
       name: editProduct.product.name,
       category: editProduct.product.category,
@@ -43,7 +37,7 @@ export default function ProductForm({closeForm}:props) {
   };
 
  
-  const sendData = async (formValues:FormValues,{ resetForm }: { resetForm: () => void }) => {
+  const sendData = async (formValues:productFormValues,{ resetForm }: { resetForm: () => void }) => {
     const res = await dispatch(editProduct.isEdit? editProductData({...editProduct.product, ...formValues}):addProductData(formValues)).unwrap();
     if (res.ok) {
       resetForm()

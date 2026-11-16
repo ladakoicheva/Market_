@@ -1,110 +1,54 @@
 import type { productI } from "../features/product/types";
-const reqLink = import.meta.env.VITE_PRODUCTS_API_URL
-
-type formData = Omit<productI, "owner" | "id">;
-type typeReq = 'POST' | 'GET' | 'DELETE' | 'PATCH';
-type typeResponseGood<A> = { ok: true, data : A };
-type typeResponseBad = { ok: false ,e?:string};
-type headers = {
-  'Content-Type': string,
-  'Authorization'?:string
-}
-export type typeResponseAPI<T> = typeResponseGood<T> | typeResponseBad;
+import { apiRequest } from "./apiRequest";
+import  type { category } from "../features/product/types";
+import type { searchResult } from "./apiTypes";
+import type { productFormValues } from "../components/ProductForm/types";
 
 
-const getQuery = (data: Record<string, any>) => {
-  const query = new URLSearchParams()
-  Object.entries(data).forEach(([key, value]) => {
-    if (value === null) return 
-    query.set(key, String(value))
-  })
+const reqLink = import.meta.env.VITE_PRODUCTS_API_URL;
 
-  return query.toString() 
-}
+
+//any на formData
+
+// {
+//   url = '',
+//   method = 'GET',
+//   baseUrl,
+//   body,
+//   params,
+// }
 
 
 
-const productAPI = async < Response, T = undefined > (url: string = '', type :  typeReq = 'GET', body ? : null | T, params ? : Record<string, any>) : Promise<typeResponseAPI<Response>> => {
-  try {
-    const token = localStorage.getItem('token');
-    const headers:headers = {
-      'Content-Type': 'application/json',
-    };
-    if (token) headers['Authorization'] = ` ${token}`
-    const query = params ? '?' + getQuery(params) : ''
-   
-    
-    const response = await fetch(`${reqLink}/${url}${query}`, {
-      method: type,
-      headers,
-      body: body ? JSON.stringify(body) : null,
-    });
-  
-
- 
-    
-    const res= await response.json();
-     if (!res.ok) return {ok : false, e:  res.e}
-
-    return {ok : true, data:res.data}
-  } catch (e) {
-    const error = e instanceof Error ? e.message : (e as string);
-    return {ok : false,e:error}
-    }
-} 
-
-
-  export const addProduct = async (formValues:formData) => {
-    const data = await productAPI<productI, formData>('add','POST',formValues);
+  export const addProduct = async (formValues:productFormValues) => {
+    const data = await apiRequest<productI, productFormValues>({ url:'', method:'POST', body:formValues ,baseUrl:reqLink});
     return data;
   }
 
-export const getUserProducts = async () => {
-      console.log(2) //!
-  const data = await productAPI<productI[]>('get', 'GET');
-  return data;
-  }
-
 export const getCategories = async () => {
-  const data = await productAPI('categories', 'GET');
+  const data = await apiRequest<category[]>({ url:'categories', method:'GET' ,baseUrl:reqLink});
   return data;
   }
 
 export const editProduct = async (product:productI) => {
-  const data = await productAPI('edit', 'PATCH',product);
+  const data = await apiRequest<productI,productI>({ url: product.id, method: 'PATCH', body: product,baseUrl:reqLink });
   return data;
 }
   
-export const getProductsByCategories = async (params: Record<string, any>) => {
-    console.log(4)
-  const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('category', 'GET', null, params);
-  return data
+export const getProductsByCategory = async (params: Record<string, any>) => {
+  const data = await apiRequest<searchResult>({ url: 'categories/products', method: 'GET', params, baseUrl: reqLink });
+  return data;
 }
-
-export const getProductsByCategSearch = async (params: Record<string, any>) => {
-    console.log(5)
-    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search', 'GET', null,params);
-  return data
-}
-
-
-export const getProductsSearch = async (params: Record<string, any>) => {
-  console.log(9)
-    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('search/all', 'GET', null,params);
-  return data
-}
-
-
 
 export const getAllProducts = async (params: Record<string, any>) => {
     console.log(7)
-    const data = await productAPI < { products: productI[], index: number, isNext:boolean }>('all', 'GET', null,params);
+  const data = await apiRequest<searchResult>({ url: '', method: 'GET', params, baseUrl: reqLink });
   return data
 }
 
 
 export const getUserProductItem = async (id: string) => {
     console.log(6)
-    const data = await productAPI < productI>('getOne/'+id, 'GET', null);
+  const data = await apiRequest<productI>({ url: id, method: 'GET', baseUrl:reqLink });
   return data
 }
