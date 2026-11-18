@@ -8,7 +8,6 @@ import type { productFormValues } from "../components/ProductForm/types";
 const reqLink = import.meta.env.VITE_PRODUCTS_API_URL;
 
 
-//any на formData
 
 // {
 //   url = '',

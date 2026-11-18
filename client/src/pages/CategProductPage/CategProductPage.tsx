@@ -4,41 +4,28 @@ import { getProductsByCategory } from '../../api/products';
 import { getProductsByCategoryForSearch } from '../../api/search';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import ShowMoreButton from '../../components/ShowMoreButton/ShowMoreButton';
-import { useEffect } from 'react';
-import { useSearchParams } from 'react-router';
 import { useParams } from 'react-router';
-import { useProducts } from '../../hooks/useProducts';
+import { useProducts } from '../../hooks/useProducts/useProducts';
 import type { productI } from '../../features/product/types';
 
 
 export default function CategProductPage() {
   // const [search, setSearch] = useState('');
   const { categ } = useParams();
-const [searchParams] = useSearchParams();
-  // const [search, setSearch] = useState('');
- 
-const searchValue = searchParams.get('search')||"";
 
-  useEffect(() => {
-      
-  
-    getProductsBySearchDB(searchValue)
 
- 
-  },[searchValue])
-  
+
 
   const { 
     products  : {  productsData }   ,
      getNext,
-    getProductsBySearchDB,
     isMore,
     
   } = useProducts< productI>({
     getProductsAll: getProductsByCategory,
     getProductsSearch: getProductsByCategoryForSearch,
-    category: categ?categ:null,
-    search:searchValue!,
+    category: categ,
+    // startSearch:searchValue!,
 
     
   });

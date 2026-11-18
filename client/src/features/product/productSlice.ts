@@ -64,12 +64,13 @@ const productSlice = createSlice({
     };
     },
   }
+
 })
 
 export const getUserProductData = createAsyncThunk
   <{ ok: boolean; e?: string },
     void,
-  { dispatch: AppDispatch }
+  { dispatch: AppDispatch, }
 >(
     'products/add',
     

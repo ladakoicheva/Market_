@@ -8,7 +8,7 @@ export default function SyncCateg() {
   useEffect(() => {
      dispatch(getCategoriesData());
     
-  },[])
+  },[dispatch])
 
   return null
 }

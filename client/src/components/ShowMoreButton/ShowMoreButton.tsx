@@ -3,7 +3,7 @@ import Button from '../Button/Button';
 
 type Props = {
   isVisible: boolean;
-  onClick: () => void | Promise<void>;
+  onClick: (v:any|void) => any;
 };
 
 export default function ShowMoreButton({ isVisible, onClick }: Props) {

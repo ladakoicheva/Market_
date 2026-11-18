@@ -1,7 +1,7 @@
 import { getHistory } from '../../api/history';
 import { useMemo } from 'react';
 import { AuthHock } from '../../hocks/AuthHock';
-import { useProducts } from '../../hooks/useProducts';
+import { useProducts } from '../../hooks/useProducts/useProducts';
 import { Link } from 'react-router';
 import type { historyI } from '../../features/history/types';
 

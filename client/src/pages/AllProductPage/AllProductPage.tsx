@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router";
-import { useEffect, useMemo } from "react";
-import { useProducts } from "../../hooks/useProducts";
+import {  useMemo } from "react";
+import { useProducts } from "../../hooks/useProducts/useProducts";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import ShowMoreButton from "../../components/ShowMoreButton/ShowMoreButton";
 import style from '../AllProductPage/AllProductPage.module.css'
@@ -12,26 +11,17 @@ import FilterIcon from "../../icons/FilterIcon";
 import FilterModal from "../../components/FilterModal/FilterModal";
 
 
+
 export default function AllProductPage() {
 
-  const [searchParams] = useSearchParams();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [search, setSearch] = useState('');
  
-const searchValue = searchParams.get('search')||"";
 
-  useEffect(() => {
- 
-    
-    
-    getProductsBySearchDB(searchValue)
-  
-  },[searchValue])
-  
-  const { 
+ const { 
     products : {  productsData } ,
     getNext,
-    getProductsBySearchDB,
     isMore,
   
    
@@ -39,11 +29,17 @@ const searchValue = searchParams.get('search')||"";
     getProductsAll: getAllProducts,
     getProductsSearch: getAllProductsForSearch,
     // search,
-    search:searchValue!,
-    category:null,
+    
+   
 
     
   });
+  // useEffect(() => {
+  //   getProductsBySearchDB(searchValue)
+  
+  // },[searchValue,getProductsBySearchDB])
+  
+ 
   
 
 

@@ -3,11 +3,11 @@ import style from './Button.module.css'
 
 type props = {
   text: string,
-  onClick: () => void | Promise<void>,
+  onClick: (v?:any) =>  any,
   isAsync :boolean,
   type?: string,
   style?: {},
-  color?:string
+  
   
 }
 
