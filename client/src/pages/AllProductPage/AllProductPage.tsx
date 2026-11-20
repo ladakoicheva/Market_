@@ -23,7 +23,7 @@ export default function AllProductPage() {
     products : {  productsData } ,
     getNext,
     isMore,
-  
+    deleteProduct
    
   } = useProducts<productI>({
     getProductsAll: getAllProducts,
@@ -49,7 +49,7 @@ export default function AllProductPage() {
 
   const cards = useMemo(() => {
        const products = productsData ;
-      return products.map((p,index) => <ProductCard product={p} key={index}  />)
+      return products.map((p,index) => <ProductCard product={p} key={index} deleteItem={deleteProduct}  />)
     }, [productsData])
 
 

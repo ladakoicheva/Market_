@@ -1,6 +1,6 @@
 export interface userI {
   email: string,
-  id: string,
+  id: number,
   role: string,
 
 };

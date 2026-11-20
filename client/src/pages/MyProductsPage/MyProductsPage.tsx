@@ -1,22 +1,24 @@
 
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import style from './MyProductsPage.module.css';
 import Loader from '../../components/Loader/Loader';
 import { useMemo } from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { AuthHock } from '../../hocks/AuthHock';
+import { deleteProductOneData } from '../../features/product/productSlice';
 
-type props={
-  closeModal: () => void,
-  openModal:()=>void
-}
- function MyProductsPage({ openModal, closeModal }: any) {
+
+ function MyProductsPage() {
   
-  const { products } = useAppSelector((s) => s.productData);
-  
-  const {isLoadingApp} = useAppSelector((s)=>s.user)
+   const { products } = useAppSelector((s) => s.productData);
+   const dispatch = useAppDispatch();
+   const { isLoadingApp } = useAppSelector((s) => s.user);
+   const deleteProduct = (id:number) => {
+     dispatch(deleteProductOneData(id))
+   }
+
   const cards = useMemo(() => {
-    return products.map((p) => <ProductCard product={p} key={p.id} openModal={openModal} closeModal={ closeModal} />)
+    return products.map((p) => <ProductCard product={p} key={p.id} deleteItem={()=>deleteProduct(p.id)} />)
   },[products])
   if (isLoadingApp) return <Loader />
   

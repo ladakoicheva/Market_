@@ -6,6 +6,7 @@ export enum ActionTypes {
   GET_PRODUCTS = 'get_products',
   GET_SEARCH = 'get_search',
   GET_NEXT_SEARCH = 'get_next_search',
+  DELETE_PRODUCT = 'delete_product'
 }
 
 
@@ -20,6 +21,7 @@ export interface searchDataI<T> {
   productsData: T[];
   index: number;
   isNext: boolean;
+
 }
 
 export interface productDataI<T> extends searchDataI<T> {
@@ -30,7 +32,8 @@ export interface ReturnI<T> {
   products: searchDataI<T>|productDataI<T>,
   isMore: boolean,
    getNext: (() => Promise<void>) | (() => (v: string) => Promise<void>),
-  getProductsBySearchDB: (query: any) => Promise<Promise<void>>
+  getProductsBySearchDB: (query: any) => Promise<Promise<void>>,
+  deleteProduct: (id: number) => Promise<void>
 }
 
 // products,
@@ -38,7 +41,7 @@ export interface ReturnI<T> {
 //     getNext,
 //     getProductsBySearchDB,
 
-export interface state<T> {
+export interface stateI<T> {
   data: productDataI<T>
   searchData:searchDataI<T>
 }

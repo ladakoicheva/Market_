@@ -1,5 +1,5 @@
 import { DB } from "../index.js";
-
+import { getSuccessReq } from "../../utils/responseHelpers.js";
 
 
 
@@ -28,7 +28,7 @@ const getSQLReqData = async ({ limit, word, cursor, category=null }) => {
 export const searchProductsDB = async ({ limit, word, cursor }) => { // 10 1
 
   const result = await getSQLReqData({ limit, word, cursor })
-  return result
+  return getSuccessReq(result);
 
 
 
@@ -38,8 +38,8 @@ export const searchProductsDB = async ({ limit, word, cursor }) => { // 10 1
 
 export const searchProductsInCategDB = async ({ limit, word, cursor, category }) => {
 
-  const result = await getSQLReqData({ limit, word, cursor, category })
-  return result
+  const result = await getSQLReqData({ limit, word, cursor, category });
+  return getSuccessReq(result);
 
 
 }

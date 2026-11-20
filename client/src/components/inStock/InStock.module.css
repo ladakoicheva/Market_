@@ -1,0 +1,13 @@
+@reference "../../index.css";
+
+.status {
+  @apply absolute bottom-0 right-0 rounded-4xl p-2.5 font-stretch-90% text-on-brand;
+}
+
+.available {
+  @apply bg-success;
+}
+
+.unavailable {
+  @apply bg-danger;
+}

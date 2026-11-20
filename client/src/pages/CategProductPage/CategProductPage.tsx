@@ -9,6 +9,7 @@ import { useProducts } from '../../hooks/useProducts/useProducts';
 import type { productI } from '../../features/product/types';
 
 
+
 export default function CategProductPage() {
   // const [search, setSearch] = useState('');
   const { categ } = useParams();
@@ -20,6 +21,7 @@ export default function CategProductPage() {
     products  : {  productsData }   ,
      getNext,
     isMore,
+    deleteProduct
     
   } = useProducts< productI>({
     getProductsAll: getProductsByCategory,
@@ -45,7 +47,7 @@ export default function CategProductPage() {
 
   const cards = useMemo(() => {
     const products = productsData ;
-      return  products.map((p,index) => <ProductCard product={p} key={index}  />)
+      return  products.map((p,index) => <ProductCard product={p} key={index} deleteItem={deleteProduct}  />)
     }, [productsData])
   
   

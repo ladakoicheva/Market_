@@ -1,24 +1,27 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { stateI } from "./types";
-import { addProduct } from "../../api/products";
+import { createProductOne } from "../../api/products";
 import type { AppDispatch } from "../../redux/store";
 import type { productI } from "./types";
 import { getUserProducts } from "../../api/users";
 import { getCategories } from "../../api/products";
-import { editProduct } from "../../api/products";
+import { editProductOne } from "../../api/products";
 import type { category } from "./types";
 import type { RootState } from "../../redux/store";
 import type { productFormValues } from "../../components/ProductForm/types";
+import { deleteProductOne } from "../../api/products";
+
+interface ProductThunkError  { ok: false; e?: string };
 
 const initialState:stateI = {
   editProduct: {
     isEdit: false, product: {
       name: "",
-      category:undefined,
+      category:"",
       price: 0,
       inStock: false,
       owner: '',
-      id:''
+      id: 0
     }
   },
   products: [],
@@ -30,25 +33,28 @@ const productSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    updateAddProduct: (state,action:PayloadAction<productI>) => {
+    updateCreateProductOne: (state,action:PayloadAction<productI>) => {
       const newProduct = action.payload;
       state.products.push(newProduct);
     },
-    updateShowUserProducts: (state, action:PayloadAction<productI[]>) => {
+    updateGetUserProducts: (state, action:PayloadAction<productI[]>) => {
       state.products = action.payload
     },
-    updateProductNoUser: (state) => {
+    resetUserProducts: (state) => {
       state.products = []
     },
-    updateCategories: (state, action: PayloadAction<category[]>) => {
+    updateGetCategories: (state, action: PayloadAction<category[]>) => {
       state.categories = action.payload
     },
     updateEditProduct: (state, action:PayloadAction<productI>) => {
       state.editProduct.isEdit = true;
       state.editProduct.product = action.payload;
     },
+    updateDeleteProductOne: (state, action: PayloadAction<number>) => {
+      state.products = state.products.filter((p) => p.id !== action.payload);
+    },
     
-     updateProductInList: (state,action:PayloadAction<productI>) => {
+     updateEditProductOne: (state,action:PayloadAction<productI>) => {
        state.editProduct.isEdit = false;
        const index = state.products.findIndex((p) => p.id === action.payload.id);
       
@@ -56,77 +62,98 @@ const productSlice = createSlice({
      
       state.editProduct.product = {
       name: "",
-      category:undefined,
+      category:"",
       price: 0,
       inStock: false,
       owner: '',
-      id:''
+      id: 0
     };
     },
   }
 
 })
 
-export const getUserProductData = createAsyncThunk
-  <{ ok: boolean; e?: string },
+export const getUserProductsData = createAsyncThunk
+  <{ ok: true; data: productI[] },
     void,
-  { dispatch: AppDispatch, }
+  { dispatch: AppDispatch; rejectValue: ProductThunkError }
 >(
     'products/add',
     
-  async (_,{dispatch}) => {
+  async (_,{dispatch, rejectWithValue}) => {
     const res = await getUserProducts()
-    if (!res.ok) return { ok: false, e: res.e };
-     dispatch(updateShowUserProducts(res.data));
-    return {ok:true}
+    if (!res.ok) {
+      return rejectWithValue({ ok: false, e: res.e });
+    }
+     dispatch(updateGetUserProducts(res.data));
+    return { ok: true, data: res.data };
   },
 
 )
 
 
-export const addProductData = createAsyncThunk<
-  { ok: boolean, data: productI }, 
+export const createProductOneData = createAsyncThunk<
+  { ok: true, data: productI }, 
   productFormValues,
-  { dispatch: AppDispatch }
+  { dispatch: AppDispatch; rejectValue: ProductThunkError }
 >(
   'products/add',
   async (newProduct, { dispatch, rejectWithValue }) => {
-    const res = await addProduct(newProduct);
+    const res = await createProductOne(newProduct);
     
     if (!res.ok) {
       return rejectWithValue({ ok: false, e: res.e });
     }
-    
-    dispatch(updateAddProduct(res.data));
+    console.log(res.data)
+    dispatch(updateCreateProductOne(res.data));
     return { ok: true, data: res.data };
   }
 );
 
 
-export const editProductData = createAsyncThunk<
-  { ok: boolean, data: productI }, 
-  productI,
-  { dispatch: AppDispatch ,state: RootState; rejectValue: { ok: boolean; e: any }}
+export const deleteProductOneData = createAsyncThunk<
+  { ok: true },
+  number,
+  { dispatch: AppDispatch; rejectValue: ProductThunkError }
 >(
-  'products/edit',
-  async (newProduct, { dispatch, rejectWithValue, getState }) => {
-    const state = getState()
-    const res = await editProduct({ ...newProduct, oldCategory: state.productData.editProduct.product.category} );
-    
+  'products/add',
+  async (id, { dispatch, rejectWithValue }) => {
+    const res = await deleteProductOne(id);
 
     if (!res.ok) {
       return rejectWithValue({ ok: false, e: res.e });
     }
+
+    dispatch(updateDeleteProductOne(id));
+    return { ok: true};
+  }
+);
+
+
+export const editProductOneData = createAsyncThunk<
+  { ok: true, data: productI }, 
+  productI,
+  { dispatch: AppDispatch; state: RootState; rejectValue: ProductThunkError }
+>(
+  'products/edit',
+  async (newProduct, { dispatch, rejectWithValue, getState }) => {
     
-    dispatch(updateProductInList(newProduct));
+    const res = await editProductOne(newProduct );
+    
+    console.log(newProduct);
+    if (!res.ok) {
+      return rejectWithValue({ ok: false, e: res.e });
+    }
+    
+    dispatch(updateEditProductOne(newProduct));
     return { ok: true, data: res.data };
   }
 );
 
 export const getCategoriesData = createAsyncThunk<
-  { ok: boolean, data: category[] }, 
+  { ok: true, data: category[] }, 
   void,
-  { dispatch: AppDispatch,rejectValue:  { ok: boolean; e?: string }}
+  { dispatch: AppDispatch; rejectValue: ProductThunkError }
 >(
   'products/getCategories',
   async (_, { dispatch, rejectWithValue }) => {
@@ -137,11 +164,19 @@ export const getCategoriesData = createAsyncThunk<
       return rejectWithValue({ ok: false, e: res.e });
     }
     
-    dispatch(updateCategories(res.data));
+    dispatch(updateGetCategories(res.data));
     return { ok: true, data: res.data};
   }
 );
 
 
 export default productSlice.reducer;
-export const {updateAddProduct,updateProductNoUser,updateShowUserProducts,updateCategories, updateEditProduct,updateProductInList} = productSlice.actions
+export const {
+  updateCreateProductOne,
+  resetUserProducts,
+  updateGetUserProducts,
+  updateGetCategories,
+  updateEditProduct,
+  updateEditProductOne,
+  updateDeleteProductOne
+} = productSlice.actions

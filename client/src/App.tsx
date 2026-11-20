@@ -11,7 +11,6 @@ import Auth from './features/user/Auth';
 import Modal from './components/Modal/Modal';
 import Page404 from './pages/404Page/Page404';
 import MyProductsPage from './pages/MyProductsPage/MyProductsPage';
-import ProductForm from './components/ProductForm/ProductForm';
 import AllProductPage from './pages/AllProductPage/AllProductPage';
 import SyncCateg from './features/product/SyncCateg';
 import History from './pages/History/History';
@@ -22,12 +21,9 @@ import style from './App.module.css';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFormOpen,setIsFormOpen] = useState(false)
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-   const openForm = () => setIsFormOpen(true);
-  const closeForm = () => setIsFormOpen(false);
-
   const dispatch = useAppDispatch();
   const { user, mode, isLoadingApp } = useAppSelector((s) => s.user);
   
@@ -45,14 +41,9 @@ function App() {
         >
            {!user ? mode : 'Log Out'}
         </button>
-        
-         
-        
-      </Header>
+        </Header>
       
-      {isFormOpen && (
-        <ProductForm closeForm={closeForm } />
-      )}
+     
 
       {isModalOpen && (
        
@@ -65,7 +56,7 @@ function App() {
         <Route path='/productItem/:id' element={<ProductItemPage/> } />
         <Route path='/' element={ <AllProductPage/>} />
         <Route path='*' element={<Page404/>}/>
-        <Route path='/myProducts' element={<MyProductsPage openModal={ openForm} closeModal={closeForm} /> } />
+        <Route path='/myProducts' element={<MyProductsPage/>  } />
         <Route path='/add' element={<AddProductPage />} />
         <Route path='/history' element={<History />} />
         <Route path='/history/:id' element={<HistoryItemPage />} />

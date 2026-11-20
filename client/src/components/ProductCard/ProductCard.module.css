@@ -12,25 +12,33 @@
 }
 
 .edit{
-  position: absolute;
-  top:5px;
-  left: 5px;
+  @apply absolute top-2 left-3
+}
+.delete{
+  @apply absolute top-2 right-3
 }
 
+.deleteIcon{
+  color: black
+}
+
+
 .productInfo{
-  @apply flex min-w-0 items-center justify-between gap-3 px-2  ;
+  @apply flex  items-center justify-between gap-3 px-2 min-w-0 truncate ;
 }
 
 .productName {
-  @apply min-w-0 truncate text-xl font-semibold leading-snug  text-ink;
+ 
+  @apply min-w-0 text-xl font-semibold leading-snug  text-ink  truncate;
 }
 
 .productPrice {
-  @apply shrink-0 text-xl font-bold  text-brand-hover;
+  min-width: 0;
+  @apply  text-xl font-bold  text-brand-hover truncate;
 }
 
 .productCurrency {
-  @apply ml-0.5 text-xl font-medium text-ink-muted;
+  @apply ml-0.5 text-xl font-medium text-ink-muted flex-0;
 }
 .image{
   
@@ -53,50 +61,7 @@
   @apply bg-danger;
 }
 
-.card button{
-
-}
 
 
 
-/* .card h1{
-  @apply text-3xl text-center font-bold;
-} */
 
-/* .card {
-  position: relative;
-  height: 100%;
-  width: 100%;
-  background: rgb(203, 182, 182);
-  padding: 1rem 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  overflow: hidden;
- color:black;
- 
-
-}
-
-.card h2,h1,p{
-  width: auto;
-  max-width: 100%;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.edit{
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  @apply text-brand transition-colors hover:text-brand-hover;
-}
-
-.cardBtn{
- position: absolute;
- bottom: 10px;
- width: 96%;
-
-} */

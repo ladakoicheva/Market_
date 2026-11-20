@@ -1,12 +1,13 @@
 import { authorize } from "../../middlewares/auth.js";
 import { Router } from "express";
 import {
-  addProduct,
-  editProduct,
+  createProductOne,
+  editProductOne,
+  deleteProductOne,
   getAllProducts,
   getCategories,
   getProductsByCategory,
-  getUserProductItem,
+  getProductOne,
 } from "./controller.js";
 
 export const productRouter = Router();
@@ -14,8 +15,9 @@ export const productRouter = Router();
 productRouter.get('/categories', getCategories);
 productRouter.get('/categories/products', getProductsByCategory);
 productRouter.get('/', getAllProducts);
-productRouter.post('/', authorize, addProduct);
-productRouter.get('/:id', getUserProductItem);
-productRouter.patch('/:id', authorize, editProduct);
+productRouter.post('/', authorize, createProductOne);
+productRouter.get('/:id', getProductOne);
+productRouter.patch('/:id', authorize, editProductOne);
+productRouter.delete('/:id', authorize, deleteProductOne);
 
 // data, fileName, ...url

@@ -6,8 +6,8 @@ import { logout } from "../../api/users";
 import { authorize } from "../../api/users";
 import type { stateI } from "./types";
 import type { AppDispatch } from "../../redux/store";
-import { updateProductNoUser } from "../product/productSlice";
-import { getUserProductData } from "../product/productSlice";
+import { resetUserProducts } from "../product/productSlice";
+import { getUserProductsData } from "../product/productSlice";
 import type { userI } from "./types";
 import type { SignInValues } from "../../components/SignInForm/types";
 import type { SignUpValuesI } from "../../components/SignUpForm/types";
@@ -119,7 +119,7 @@ export const authorizeUser = createAsyncThunk<
      
       if (!res.ok) {
         dispatch(changeUserData(null));
-        dispatch(updateProductNoUser());
+        dispatch(resetUserProducts());
         
 
         return rejectWithValue({
@@ -127,7 +127,7 @@ export const authorizeUser = createAsyncThunk<
           e:res.e as string ,
         });
       }
-      dispatch(getUserProductData());
+      dispatch(getUserProductsData());
       dispatch(changeUserData(res.data.user));
     
       return { ok: true };

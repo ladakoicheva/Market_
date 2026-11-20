@@ -1,14 +1,14 @@
 
 type props={
-  deleteTodo: (id: string) => void,
-  id: string;
+  deleteItem: () => void,
+  className:string
 }
 
-export default function DeleteIcon({deleteTodo,id}:props) {
+export default function DeleteIcon({deleteItem,className}:props) {
   return (
      <svg
-          onClick={() => deleteTodo(id)}
-          className="deleteIcon"
+          onClick={ deleteItem}
+          className={className}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="24"

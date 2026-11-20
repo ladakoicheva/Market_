@@ -12,9 +12,9 @@ export type category = {text:CategoriesE}
 
 export interface productI {
   name: string,
-  category:  CategoriesE | undefined,
+  category:  CategoriesE | string,
   price: number,
-  id: string,
+  id: number,
   owner?: string;
   inStock: boolean;
   oldCategory?:string

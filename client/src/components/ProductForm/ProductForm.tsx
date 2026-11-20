@@ -3,46 +3,39 @@ import style from './ProductForm.module.css'
 import Button from "../Button/Button";
 import { useState } from "react";
 import Switches from "../Switch";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addProductData } from "../../features/product/productSlice";
-import { editProductData } from "../../features/product/productSlice";
+import { useAppDispatch } from "../../redux/hooks";
+import { createProductOneData } from "../../features/product/productSlice";
 import type { productFormValues } from "./types";
 import { useNavigate } from "react-router";
+import ErrorIcon from "../../icons/ErrorIcon";
+import CategorySelect from "../CategorySelect/CategorySelect";
 
 
 
-type props = {
-  closeForm?:()=>void
-}
 
-export default function ProductForm({closeForm}:props) {
-  const { categories ,editProduct} = useAppSelector((s) => s.productData);
+export default function ProductForm() {
+  
   const [backError] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
 
  
-  const initialValues: productFormValues= editProduct.isEdit ?
-    {
-      name: editProduct.product.name,
-      category: editProduct.product.category,
-      price: editProduct.product.price,
-      inStock:editProduct.product.inStock
-     } : {
+  const initialValues: productFormValues= 
+   {
   name: "",
-  category: undefined,
+  category: "",
   price: 0,
-      inStock: false,
+  inStock: false,
   };
 
  
   const sendData = async (formValues:productFormValues,{ resetForm }: { resetForm: () => void }) => {
-    const res = await dispatch(editProduct.isEdit? editProductData({...editProduct.product, ...formValues}):addProductData(formValues)).unwrap();
+    const res = await dispatch(createProductOneData(formValues)).unwrap();
     if (res.ok) {
       resetForm()
       navigate('/myProducts')
-      if(closeForm)closeForm();
+      
     }
 
   }
@@ -52,7 +45,7 @@ export default function ProductForm({closeForm}:props) {
       // validationSchema={schema}
       onSubmit={sendData}
     >
-      {({ errors, touched, handleSubmit }) => (
+      {({ errors, touched, handleSubmit,handleChange,values }) => (
         <Form className={style.productForm}>
           <label htmlFor="name">Name</label>
           <div className={style.modalItem} >
@@ -67,40 +60,19 @@ export default function ProductForm({closeForm}:props) {
      
           {touched.name && errors.name && (
             <div className={style.errors}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="#ff4d4d" />
-                <path d="M12 7V13" stroke="white" stroke-width="2" stroke-linecap="round" />
-                <circle cx="12" cy="16" r="1" fill="white" />
-              </svg>
+              <ErrorIcon />
               <ErrorMessage name="name" />
             </div>
           )}
 
           <label htmlFor="category">Category</label>
           <div className={style.modalItem}>
-            <Field 
-              as="select"
-              aria-invalid={(touched.category && !!errors.category) || !!backError}
-              id="category"
-              type="category"
-              name="category"
-              placeholder="category"
-            >
-              <option value="choose" hidden>Сhoose Category</option>
-              {
-                categories.map((c)=><option value={c.text} key={c.text}>{c.text}</option>)
-              }
-             
-            </Field>
+            <CategorySelect onChange={handleChange} value={values.category } />
           </div>
           
           {touched.category && errors.category && (
             <div className={style.errors}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="#ff4d4d" />
-                <path d="M12 7V13" stroke="white" stroke-width="2" stroke-linecap="round" />
-                <circle cx="12" cy="16" r="1" fill="white" />
-              </svg>
+              <ErrorIcon />
               <ErrorMessage name="category" />
             </div>
           )}
@@ -118,22 +90,14 @@ export default function ProductForm({closeForm}:props) {
           
           {touched.category && errors.category && (
             <div className={style.errors}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="#ff4d4d" />
-                <path d="M12 7V13" stroke="white" stroke-width="2" stroke-linecap="round" />
-                <circle cx="12" cy="16" r="1" fill="white" />
-              </svg>
+              <ErrorIcon />
               <ErrorMessage name="password" />
             </div>
           )}
 
           {backError && (
             <div className={style.errors}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="#ff4d4d" />
-                <path d="M12 7V13" stroke="white" stroke-width="2" stroke-linecap="round" />
-                <circle cx="12" cy="16" r="1" fill="white" />
-              </svg>
+              <ErrorIcon />
               {backError}
             </div>
           )}
@@ -148,13 +112,10 @@ export default function ProductForm({closeForm}:props) {
             />
             </div>
            
-             
-          
-
-          <Button
+             <Button
             style={{background:'pink'}}
             onClick={handleSubmit}
-            text={!editProduct.isEdit?"Add":"Edit"}
+            text="Add"
             isAsync={true}
           />
         </Form>
